@@ -1,0 +1,28 @@
+name: kursus_mengemudi_nasional
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  bloc: ^9.0.0
+  dartz: ^0.10.1
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  freezed_annotation: ^2.4.4
+  http: ^1.4.0
+  intl: ^0.20.2
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
