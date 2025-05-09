@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
+import 'package:kursus_mengemudi_nasional/models/request/register_request.dart';
 import '../utils/theme.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -11,32 +14,27 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
   bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
     _usernameController.dispose();
-    _emailController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   void _register() {
     if (_formKey.currentState!.validate()) {
-      // In a real app, implement registration logic here
-      Navigator.pushReplacementNamed(context, '/');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Pendaftaran berhasil! Silakan login.'),
-          backgroundColor: Colors.green,
-        ),
+      final request = RegisterRequestModel(
+        username: _usernameController.text,
+        noHp: _phoneController.text,
+        password: _passwordController.text,
+      );
+      BlocProvider.of<RegisterBloc>(context).add(
+        RegisterEvent.register(request),
       );
     }
   }
@@ -74,7 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               const SizedBox(height: 32),
-
               // Registration Form
               Form(
                 key: _formKey,
@@ -93,29 +90,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Username tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Email Field
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'Masukkan email Anda',
-                        prefixIcon: Icon(Icons.email),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Email tidak boleh kosong';
-                        }
-                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                            .hasMatch(value)) {
-                          return 'Masukkan email yang valid';
                         }
                         return null;
                       },
@@ -177,52 +151,43 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
 
-                    const SizedBox(height: 16),
-
-                    // Confirm Password Field
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      obscureText: !_isConfirmPasswordVisible,
-                      decoration: InputDecoration(
-                        labelText: 'Konfirmasi Password',
-                        hintText: 'Konfirmasi password Anda',
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isConfirmPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isConfirmPasswordVisible =
-                                  !_isConfirmPasswordVisible;
-                            });
-                          },
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Konfirmasi password tidak boleh kosong';
-                        }
-                        if (value != _passwordController.text) {
-                          return 'Password tidak cocok';
-                        }
-                        return null;
-                      },
-                    ),
-
                     const SizedBox(height: 32),
 
                     // Register Button
-                    ElevatedButton(
-                      onPressed: _register,
-                      child: const Text('DAFTAR'),
+                    BlocListener<RegisterBloc, RegisterState>(
+                      listener: (context, state) {
+                        state.maybeWhen(
+                          orElse: () {},
+                          loading: () {
+                            return showDialog(
+                              context: context,
+                              builder: (context) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppTheme.primaryColor,
+                                ),
+                              ),
+                            );
+                          },
+                          success: (data) {
+                            Navigator.pushReplacementNamed(context, '/');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Pendaftaran berhasil! Silakan login.'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: ElevatedButton(
+                        onPressed: () => _register(),
+                        child: const Text('DAFTAR'),
+                      ),
                     ),
 
                     const SizedBox(height: 16),
 
-                    // Login Link
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

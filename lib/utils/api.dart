@@ -9,4 +9,5 @@ class Api {
 class ApiEndpoint {
   static const String login = '${BaseUrl.baseUrl}${Api.api}/login';
   static const String logout = '${BaseUrl.baseUrl}${Api.api}/logout';
+  static const String register = '${BaseUrl.baseUrl}${Api.api}/register';
 }

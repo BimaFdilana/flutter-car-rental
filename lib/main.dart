@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/auth/auth_remote.dart';
 import 'screens/login_page.dart';
@@ -31,6 +32,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => LogoutBloc(
             logoutRemoteDatasource: LoginRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => RegisterBloc(
+            registerRemoteDatasource: LoginRemoteDatasource(),
           ),
         ),
       ],

@@ -70,20 +70,20 @@ class User {
       };
 }
 
-class ErrorResponseModel {
+class LoginErrorResponseModel {
     final bool success;
     final String message;
 
-    ErrorResponseModel({
+    LoginErrorResponseModel({
         required this.success,
         required this.message,
     });
 
-    factory ErrorResponseModel.fromJson(String str) => ErrorResponseModel.fromMap(json.decode(str));
+    factory LoginErrorResponseModel.fromJson(String str) => LoginErrorResponseModel.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory ErrorResponseModel.fromMap(Map<String, dynamic> json) => ErrorResponseModel(
+    factory LoginErrorResponseModel.fromMap(Map<String, dynamic> json) => LoginErrorResponseModel(
         success: json["success"],
         message: json["message"],
     );

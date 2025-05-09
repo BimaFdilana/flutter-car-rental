@@ -195,15 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         builder: (context, state) {
                           return ElevatedButton(
-                            onPressed: () {
-                              final request = LoginRequestModel(
-                                auth: _usernameController.text,
-                                password: _passwordController.text,
-                              );
-                              context
-                                  .read<LoginBloc>()
-                                  .add(LoginEvent.login(request));
-                            },
+                            onPressed: () => login(),
                             child: const Text('MASUK'),
                           );
                         },
