@@ -23,6 +23,31 @@ class OrderProductRemoteDatasource {
       headers: headers,
       body: request.toJson(),
     );
+    if (response.statusCode == 201) {
+      try {
+        final decodedJson = jsonDecode(response.body);
+        final model = OrderProdukResponseModel.fromMap(decodedJson);
+        return Right(model);
+      } catch (e) {
+        return Left('Error Parsing Json: $e');
+      }
+    } else {
+      return Left(response.body);
+    }
+  }
+
+  Future<Either<String, OrderProdukResponseModel>> getOrderData() async {
+    final authData = await AuthlocalDatasource().getLoginData();
+    final headers = {
+      'Authorization': 'Bearer ${authData.token}',
+      'Content-Type': 'application/json',
+    };
+    final response = await http.get(
+      Uri.parse(
+        ApiEndpoint.orderData,
+      ),
+      headers: headers,
+    );
     if (response.statusCode == 200) {
       try {
         final decodedJson = jsonDecode(response.body);

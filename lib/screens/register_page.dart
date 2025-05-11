@@ -169,7 +169,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             );
                           },
                           success: (data) {
-                            Navigator.pushReplacementNamed(context, '/');
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(

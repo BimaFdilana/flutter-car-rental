@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/login/login_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/request/login_request.dart';
+import 'package:kursus_mengemudi_nasional/screens/main_nav.dart';
+import 'package:kursus_mengemudi_nasional/screens/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -128,9 +130,11 @@ class _LoginPageState extends State<LoginPage> {
                               debugPrint(value.data.toString());
                               if (value.data.user.role == 'Siswa' ||
                                   value.data.user.role == 'siswa') {
-                                Navigator.pushReplacementNamed(
+                                Navigator.pushReplacement(
                                   context,
-                                  '/packages',
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MainNavigation()),
                                 );
                               } else if (value.data.user.role == 'Owner' ||
                                   value.data.user.role == 'owner') {
@@ -184,7 +188,11 @@ class _LoginPageState extends State<LoginPage> {
                           const Text('Belum punya akun?'),
                           TextButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/register');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegisterPage()));
                             },
                             child: const Text('Daftar'),
                           ),

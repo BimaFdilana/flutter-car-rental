@@ -1,5 +1,5 @@
 class BaseUrl {
-  static const String baseUrl = 'http://192.168.192.110:8000';
+  static const String baseUrl = 'http://192.168.88.6:8000';
 }
 
 class Api {
@@ -13,4 +13,5 @@ class ApiEndpoint {
 
   static const String shopProducts = '${BaseUrl.baseUrl}${Api.api}/paket';
   static const String orderProduct = '${BaseUrl.baseUrl}${Api.api}/pesanan';
+  static const String orderData = '${BaseUrl.baseUrl}${Api.api}/siswa/lihat-pesanan';
 }

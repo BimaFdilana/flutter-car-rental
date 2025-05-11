@@ -1,292 +1,737 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../models/cart_item.dart';
-import '../utils/theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
+import 'package:kursus_mengemudi_nasional/models/response/siswa/jadwal_convert.dart';
+import 'package:kursus_mengemudi_nasional/models/response/siswa/order_product_response.dart';
 
-class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+class ChartPage extends StatefulWidget {
+  const ChartPage({super.key});
 
   @override
-  State<CartPage> createState() => _CartPageState();
+  State<ChartPage> createState() => _ChartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
-  final List<CartItem> _cartItems = [];
-  final NumberFormat currencyFormat = NumberFormat.currency(
-    locale: 'id',
-    symbol: 'Rp ',
-    decimalDigits: 0,
-  );
+class _ChartPageState extends State<ChartPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<OrderDataBloc>().add(const OrderDataEvent.getOrderData());
+  }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if there's a new cart item passed from the schedule page
-    final args = ModalRoute.of(context)?.settings.arguments;
-    if (args != null && args is CartItem && !_cartItems.contains(args)) {
-      setState(() {
-        _cartItems.add(args);
-      });
-    }
-  }
-
-  void _removeItem(int index) {
-    setState(() {
-      _cartItems.removeAt(index);
-    });
-  }
-
-  void _checkout() {
-    if (_cartItems.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Keranjang masih kosong'),
-          backgroundColor: Colors.red,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.blueAccent.shade700,
+        title: const Text(
+          'Detail Pesanan',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ),
         ),
-      );
-      return;
-    }
-
-    // In a real app, implement checkout logic
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Pemesanan Berhasil'),
-        content: const Text(
-          'Terima kasih telah memesan kursus mengemudi di NASIONAL Kursus Mengemudi. '
-          'Tim kami akan segera menghubungi Anda untuk konfirmasi.',
-        ),
+        centerTitle: true,
         actions: [
-          TextButton(
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
             onPressed: () {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              Navigator.pushReplacementNamed(context, '/packages');
+              context
+                  .read<OrderDataBloc>()
+                  .add(const OrderDataEvent.getOrderData());
             },
-            child: const Text('OK'),
+          ),
+        ],
+      ),
+      body: BlocConsumer<OrderDataBloc, OrderDataState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            orElse: () {},
+            error: (message) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(message),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.redAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        builder: (context, state) {
+          return state.maybeWhen(
+            initial: () => _buildEmptyState(
+              icon: Icons.inbox_rounded,
+              message: 'Belum ada data pesanan',
+            ),
+            loading: () => const Center(
+              child: CircularProgressIndicator(
+                color: Colors.blueAccent,
+              ),
+            ),
+            loaded: (data) {
+              final pesanan = data.pesanan;
+              return _buildOrderDetails(pesanan);
+            },
+            error: (message) => _buildEmptyState(
+              icon: Icons.error_outline_rounded,
+              message: 'Gagal memuat data: $message',
+              showRefresh: true,
+            ),
+            orElse: () => _buildEmptyState(
+              icon: Icons.help_outline_rounded,
+              message: 'Status tidak dikenali',
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildEmptyState({
+    required IconData icon,
+    required String message,
+    bool showRefresh = false,
+  }) {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 80,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 24),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (showRefresh) ...[
+              const SizedBox(height: 32),
+              _buildRefreshButton(),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOrderDetails(Pesanan pesanan) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildOrderProgress(pesanan),
+            const SizedBox(height: 24),
+            _buildOrderDetailCard(pesanan),
+            const SizedBox(height: 16),
+            if (pesanan.status.toLowerCase() != 'completed')
+              _buildActionButtons(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOrderProgress(Pesanan pesanan) {
+    // Calculate progress percentage
+    double totalJam = double.tryParse(pesanan.jumlahJamPaket.toString()) ?? 0;
+    double terpakai = double.tryParse(pesanan.totalJamTerpakai.toString()) ?? 0;
+    double progressPercentage = totalJam > 0 ? terpakai / totalJam : 0;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Progress Kursus',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              _buildStatusChip(pesanan.status),
+            ],
+          ),
+          const SizedBox(height: 20),
+          LinearProgressIndicator(
+            value: progressPercentage,
+            backgroundColor: Colors.grey[200],
+            valueColor:
+                AlwaysStoppedAnimation<Color>(_getStatusColor(pesanan.status)),
+            minHeight: 10,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildProgressStat(
+                label: 'Terpakai',
+                value: '${pesanan.totalJamTerpakai} Jam',
+                color: Colors.blueAccent,
+              ),
+              _buildProgressStat(
+                label: 'Sisa',
+                value: '${pesanan.sisaJam} Jam',
+                color: Colors.orangeAccent,
+              ),
+              _buildProgressStat(
+                label: 'Total',
+                value: '${pesanan.jumlahJamPaket} Jam',
+                color: Colors.greenAccent[700]!,
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  double _calculateTotal() {
-    return _cartItems.fold(0, (sum, item) => sum + item.price);
+  Widget _buildProgressStat({
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[600],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Keranjang'),
+  Widget _buildOrderDetailCard(Pesanan pesanan) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      body: _cartItems.isEmpty
-          ? const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 64,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Keranjang Anda kosong',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textColor,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Silakan pilih paket kursus terlebih dahulu',
-                    style: TextStyle(
-                      color: AppTheme.lightTextColor,
-                    ),
-                  ),
-                ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.blueAccent.withOpacity(0.1),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
               ),
-            )
-          : Column(
+            ),
+            child: Row(
               children: [
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _cartItems.length,
-                    itemBuilder: (context, index) {
-                      final item = _cartItems[index];
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 16),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Package Type
-                                        Text(
-                                          item.packageType,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppTheme.textColor,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        // Price
-                                        Text(
-                                          currencyFormat.format(item.price),
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppTheme.accentColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Remove button
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () => _removeItem(index),
-                                  ),
-                                ],
-                              ),
-                              const Divider(height: 24),
-                              // Schedule info
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.calendar_today,
-                                    size: 16,
-                                    color: AppTheme.primaryColor,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    DateFormat('EEEE, d MMMM yyyy', 'id_ID')
-                                        .format(item.scheduledDate),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: AppTheme.textColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              // Time info
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.access_time,
-                                    size: 16,
-                                    color: AppTheme.primaryColor,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    item.startTime.format(context),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: AppTheme.textColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              // Payment method
-                              Row(
-                                children: [
-                                  Icon(
-                                    item.paymentMethod == 'Bayar di Tempat'
-                                        ? Icons.money
-                                        : item.paymentMethod == 'Transfer Bank'
-                                            ? Icons.account_balance
-                                            : item.paymentMethod == 'QRIS'
-                                                ? Icons.qr_code
-                                                : Icons.account_balance_wallet,
-                                    size: 16,
-                                    color: AppTheme.primaryColor,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    item.paymentMethod,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: AppTheme.textColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                Icon(
+                  Icons.directions_car_rounded,
+                  color: Colors.blueAccent[700],
+                  size: 24,
                 ),
-                // Summary and Checkout Button
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, -5),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Total',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.textColor,
-                            ),
-                          ),
-                          Text(
-                            currencyFormat.format(_calculateTotal()),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.accentColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _checkout,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: AppTheme.accentColor,
-                          ),
-                          child: const Text('CHECKOUT'),
-                        ),
-                      ),
-                    ],
+                const SizedBox(width: 12),
+                const Text(
+                  'Informasi Pesanan',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueAccent,
                   ),
                 ),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _buildDetailRow(
+                  icon: Icons.receipt_rounded,
+                  label: 'ID Pesanan',
+                  value: '${pesanan.id}',
+                ),
+                _buildDivider(),
+                _buildDetailRow(
+                  icon: Icons.inventory_2_rounded,
+                  label: 'ID Paket',
+                  value: pesanan.paket,
+                ),
+                _buildDivider(),
+                _buildDetailRow(
+                  icon: Icons.timer_rounded,
+                  label: 'Jumlah Jam',
+                  value: '${pesanan.jumlahJamPaket} jam',
+                ),
+                _buildDivider(),
+                _buildDetailRow(
+                  icon: Icons.directions_car_filled_rounded,
+                  label: 'Mobil',
+                  value: pesanan.mobil != null
+                      ? 'Daihatsu Xenia'
+                      : 'Toyota Avanza',
+                ),
+                _buildDivider(),
+                _buildDetailJadwalRowList(
+                  icon: Icons.event_rounded,
+                  label: 'Jadwal',
+                  listJadwal: pesanan.jadwal,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailJadwalRowList({
+    required IconData icon,
+    required String label,
+    required List<Jadwal> listJadwal,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 20,
+              color: Colors.blueAccent,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                // Cek apakah jadwal kosong
+                if (listJadwal.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      'Tidak ada jadwal tersedia',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  )
+                else
+                  ...listJadwal.map((jadwal) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Column(
+                          children: [
+                            _buildScheduleItem(
+                                jadwal.tanggal,
+                                jadwal.status,
+                                jadwal.durasiJam.toStringAsFixed(1),
+                                jadwal.waktuMulai,
+                                jadwal.tanggal,
+                                jadwal.waktuSelesai),
+                          ],
+                        ),
+                      )),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScheduleItem(String time, String status, String durasi,
+      String waktuMulai, String tanggal, String waktuSelesai) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Status',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                status,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+              Text(
+                'Durasi',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '$durasi Jam',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+              Text(
+                'Waktu Mulai',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                "$waktuMulai WIB",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+              Text(
+                'Tanggal',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                tanggal,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+              Text(
+                'Waktu Selesai',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                "$waktuSelesai WIB",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 20,
+              color: Colors.blueAccent,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Divider(
+      color: Colors.grey[200],
+      thickness: 1,
+      height: 1,
+    );
+  }
+
+  Widget _buildStatusChip(String status) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: _getStatusColor(status).withOpacity(0.15),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _getStatusIcon(status),
+            size: 14,
+            color: _getStatusColor(status),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            _getFormattedStatus(status),
+            style: TextStyle(
+              color: _getStatusColor(status),
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getFormattedStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'Menunggu';
+      case 'completed':
+        return 'Selesai';
+      case 'cancelled':
+        return 'Dibatalkan';
+      default:
+        return status;
+    }
+  }
+
+  IconData _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Icons.schedule_rounded;
+      case 'completed':
+        return Icons.check_circle_rounded;
+      case 'cancelled':
+        return Icons.cancel_rounded;
+      default:
+        return Icons.info_rounded;
+    }
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Colors.orangeAccent;
+      case 'completed':
+        return Colors.greenAccent[700]!;
+      case 'cancelled':
+        return Colors.redAccent;
+      default:
+        return Colors.blueAccent;
+    }
+  }
+
+  Widget _buildActionButtons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                // Implement jadwalkan action
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              icon: const Icon(Icons.calendar_month_rounded),
+              label: const Text(
+                'Jadwalkan Kursus',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: Colors.blueAccent.withOpacity(0.1),
+            child: IconButton(
+              onPressed: () {
+                // Implement contact support
+              },
+              icon: const Icon(
+                Icons.support_agent_rounded,
+                color: Colors.blueAccent,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRefreshButton() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        context.read<OrderDataBloc>().add(const OrderDataEvent.getOrderData());
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        elevation: 0,
+      ),
+      icon: const Icon(Icons.refresh_rounded),
+      label: const Text(
+        'Muat Ulang Data',
+        style: TextStyle(fontWeight: FontWeight.w600),
+      ),
     );
   }
 }

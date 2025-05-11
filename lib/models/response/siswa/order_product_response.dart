@@ -1,13 +1,13 @@
 import 'dart:convert';
 
+import 'package:kursus_mengemudi_nasional/models/response/siswa/jadwal_convert.dart';
+
 class OrderProdukResponseModel {
   final bool success;
-  final String message;
   final Pesanan pesanan;
 
   OrderProdukResponseModel({
     required this.success,
-    required this.message,
     required this.pesanan,
   });
 
@@ -19,57 +19,62 @@ class OrderProdukResponseModel {
   factory OrderProdukResponseModel.fromMap(Map<String, dynamic> json) =>
       OrderProdukResponseModel(
         success: json["success"],
-        message: json["message"],
-        pesanan: Pesanan.fromMap(json["pesanan"]),
+        pesanan: Pesanan.fromMap(json["data"]),
       );
 
   Map<String, dynamic> toMap() => {
         "success": success,
-        "message": message,
-        "pesanan": pesanan.toMap(),
+        "data": pesanan.toMap(),
       };
 }
 
 class Pesanan {
-  final int paketId;
-  final int userId;
-  final String mobil;
-  final String status;
-  final DateTime updatedAt;
-  final DateTime createdAt;
   final int id;
+  final String paket;
+  final int jumlahJamPaket;
+  final String? mobil;
+  final String? buktiPembayaran;
+  final String status;
+  final double totalJamTerpakai; // ubah ke double
+  final double sisaJam; // ubah ke double
+  final List<Jadwal> jadwal;
 
   Pesanan({
-    required this.paketId,
-    required this.userId,
-    required this.mobil,
-    required this.status,
-    required this.updatedAt,
-    required this.createdAt,
     required this.id,
+    required this.paket,
+    required this.jumlahJamPaket,
+    this.mobil,
+    this.buktiPembayaran,
+    required this.status,
+    required this.totalJamTerpakai,
+    required this.sisaJam,
+    required this.jadwal,
   });
 
-  factory Pesanan.fromJson(String str) => Pesanan.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
   factory Pesanan.fromMap(Map<String, dynamic> json) => Pesanan(
-        paketId: json["paket_id"],
-        userId: json["user_id"],
-        mobil: json["mobil"],
-        status: json["status"],
-        updatedAt: DateTime.parse(json["updated_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
         id: json["id"],
+        paket: json["paket"],
+        jumlahJamPaket: json["jumlah_jam_paket"],
+        mobil: json["mobil"],
+        buktiPembayaran: json["bukti_pembayaran"],
+        status: json["status"],
+        totalJamTerpakai: (json["total_jam_terpakai"] as num).toDouble(),
+        sisaJam: (json["sisa_jam"] as num).toDouble(),
+        jadwal: (json["jadwal"] as List<dynamic>?)
+                ?.map((item) => Jadwal.fromMap(item))
+                .toList() ??
+            [],
       );
 
   Map<String, dynamic> toMap() => {
-        "paket_id": paketId,
-        "user_id": userId,
-        "mobil": mobil,
-        "status": status,
-        "updated_at": updatedAt.toIso8601String(),
-        "created_at": createdAt.toIso8601String(),
         "id": id,
+        "paket": paket,
+        "jumlah_jam_paket": jumlahJamPaket,
+        "mobil": mobil,
+        "bukti_pembayaran": buktiPembayaran,
+        "status": status,
+        "total_jam_terpakai": totalJamTerpakai,
+        "sisa_jam": sisaJam,
+        "jadwal": jadwal.map((x) => x.toMap()).toList(),
       };
 }
