@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/orderProduct/order_product_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/auth/auth_remote.dart';
+import 'package:kursus_mengemudi_nasional/models/remote/siswa/order_product_remote.dart';
+import 'package:kursus_mengemudi_nasional/models/remote/siswa/product_remote.dart';
 import 'screens/login_page.dart';
 import 'screens/register_page.dart';
 import 'screens/package_page.dart';
@@ -37,6 +41,16 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => RegisterBloc(
             registerRemoteDatasource: LoginRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ProductBloc(
+            remoteDatasource: ProductRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => OrderProductBloc(
+            remote: OrderProductRemoteDatasource(),
           ),
         ),
       ],

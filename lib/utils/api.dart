@@ -12,4 +12,5 @@ class ApiEndpoint {
   static const String register = '${BaseUrl.baseUrl}${Api.api}/register';
 
   static const String shopProducts = '${BaseUrl.baseUrl}${Api.api}/paket';
+  static const String orderProduct = '${BaseUrl.baseUrl}${Api.api}/pesanan';
 }
