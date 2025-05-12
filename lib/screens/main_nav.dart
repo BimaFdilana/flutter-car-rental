@@ -128,10 +128,10 @@ class _MainNavigationState extends State<MainNavigation> {
             _buildNavItem(
               icon: Icons.person_rounded,
               label: 'Profile',
-              isActive: _currentIndex == 3,
+              isActive: _currentIndex == 2,
               onTap: () {
                 setState(() {
-                  _currentIndex = 3;
+                  _currentIndex = 2;
                 });
               },
             ),

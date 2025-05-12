@@ -564,6 +564,7 @@ class _PackagePageState extends State<PackagePage> {
             });
           },
           error: (err) {
+            debugPrint(err);
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -590,6 +591,7 @@ class _PackagePageState extends State<PackagePage> {
                     idPaket: package.id,
                     mobil: Constants.cars.first,
                   );
+                  debugPrint(request.toJson());
                   context
                       .read<OrderProductBloc>()
                       .add(OrderProductEvent.orderProduct(request));
