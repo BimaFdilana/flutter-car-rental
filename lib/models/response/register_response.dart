@@ -115,9 +115,15 @@ class Message {
     String toJson() => json.encode(toMap());
 
     factory Message.fromMap(Map<String, dynamic> json) => Message(
-        username: List<String>.from(json["username"].map((x) => x)),
-        noHp: List<String>.from(json["no_hp"].map((x) => x)),
-        password: List<String>.from(json["password"].map((x) => x)),
+        username: json["username"] != null
+            ? List<String>.from(json["username"].map((x) => x.toString()))
+            : [],
+        noHp: json["no_hp"] != null
+            ? List<String>.from(json["no_hp"].map((x) => x.toString()))
+            : [],
+        password: json["password"] != null
+            ? List<String>.from(json["password"].map((x) => x.toString()))
+            : [],
     );
 
     Map<String, dynamic> toMap() => {

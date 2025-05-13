@@ -6,9 +6,11 @@ import 'package:kursus_mengemudi_nasional/logic/orderProduct/order_product_bloc.
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/product_response.dart';
+import 'package:kursus_mengemudi_nasional/screens/cart_page.dart';
 import 'package:kursus_mengemudi_nasional/screens/main_nav.dart';
 import 'package:kursus_mengemudi_nasional/utils/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:kursus_mengemudi_nasional/widget/dialog_loading.dart';
 
 class PackagePage extends StatefulWidget {
   const PackagePage({super.key});
@@ -521,61 +523,33 @@ class _PackagePageState extends State<PackagePage> {
         state.maybeWhen(
           orElse: () {},
           loading: () {
-            return showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => Center(
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircularProgressIndicator(
-                        color: Colors.blueAccent,
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'Memproses pesanan...',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
+            // Tampilkan dialog sebagai modal
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) =>
+                    const DialogLoading(), // Pisahkan widget dialog agar reusable
+              );
+            });
           },
           success: (dataOrder) {
-            Future.delayed(const Duration(seconds: 1), () {
+            // Tutup dialog
+            if (Navigator.canPop(context)) {
               Navigator.pop(context);
+            }
+
+            // Arahkan ke ChartPage
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MainNavigation(initialIndex: 1),
+                  builder: (context) =>
+                      const ChartPage(), 
                 ),
                 (route) => false,
               );
             });
-          },
-          error: (err) {
-            debugPrint(err);
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error: $err'),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
           },
         );
       },
@@ -589,7 +563,7 @@ class _PackagePageState extends State<PackagePage> {
                 return () {
                   final request = OrderProdukRequestModel(
                     idPaket: package.id,
-                    mobil: Constants.cars.first,
+                    mobil: Constants.cars[1],
                   );
                   debugPrint(request.toJson());
                   context

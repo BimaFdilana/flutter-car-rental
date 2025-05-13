@@ -25,15 +25,10 @@ class OrderProductRemoteDatasource {
       body: request.toJson(),
     );
     if (response.statusCode == 201) {
-      try {
-        debugPrint("RESPONSE BODY: ${response.body}");
-        final decodedJson = jsonDecode(response.body);
-        final model = OrderProdukResponseModel.fromMap(decodedJson);
-        return Right(model);
-      } catch (e) {
-        
-        return Left('Error1 Parsing Json: $e');
-      }
+      debugPrint("RESPONSE BODY: ${response.body}");
+      final decodedJson = jsonDecode(response.body);
+      final model = OrderProdukResponseModel.fromMap(decodedJson);
+      return Right(model);
     } else {
       return Left(response.body);
     }

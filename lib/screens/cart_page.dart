@@ -48,18 +48,6 @@ class _ChartPageState extends State<ChartPage> {
         listener: (context, state) {
           state.maybeWhen(
             orElse: () {},
-            error: (message) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(message),
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.redAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              );
-            },
           );
         },
         builder: (context, state) {
@@ -79,7 +67,7 @@ class _ChartPageState extends State<ChartPage> {
             },
             error: (message) => _buildEmptyState(
               icon: Icons.error_outline_rounded,
-              message: 'Gagal memuat data: $message',
+              message: 'Keranjang Kosong',
               showRefresh: true,
             ),
             orElse: () => _buildEmptyState(
@@ -118,10 +106,6 @@ class _ChartPageState extends State<ChartPage> {
               ),
               textAlign: TextAlign.center,
             ),
-            if (showRefresh) ...[
-              const SizedBox(height: 32),
-              _buildRefreshButton(),
-            ],
           ],
         ),
       ),
