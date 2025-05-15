@@ -329,24 +329,24 @@ mixin _$OrderProductState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(OrderProdukResponseModel dataOrder) success,
-    required TResult Function(String message) error,
+    required TResult Function(BasePesananResponseModel dataOrder) success,
+    required TResult Function(BasePesananResponseModel messageError) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(OrderProdukResponseModel dataOrder)? success,
-    TResult? Function(String message)? error,
+    TResult? Function(BasePesananResponseModel dataOrder)? success,
+    TResult? Function(BasePesananResponseModel messageError)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(OrderProdukResponseModel dataOrder)? success,
-    TResult Function(String message)? error,
+    TResult Function(BasePesananResponseModel dataOrder)? success,
+    TResult Function(BasePesananResponseModel messageError)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -441,8 +441,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(OrderProdukResponseModel dataOrder) success,
-    required TResult Function(String message) error,
+    required TResult Function(BasePesananResponseModel dataOrder) success,
+    required TResult Function(BasePesananResponseModel messageError) error,
   }) {
     return initial();
   }
@@ -452,8 +452,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(OrderProdukResponseModel dataOrder)? success,
-    TResult? Function(String message)? error,
+    TResult? Function(BasePesananResponseModel dataOrder)? success,
+    TResult? Function(BasePesananResponseModel messageError)? error,
   }) {
     return initial?.call();
   }
@@ -463,8 +463,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(OrderProdukResponseModel dataOrder)? success,
-    TResult Function(String message)? error,
+    TResult Function(BasePesananResponseModel dataOrder)? success,
+    TResult Function(BasePesananResponseModel messageError)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -558,8 +558,8 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(OrderProdukResponseModel dataOrder) success,
-    required TResult Function(String message) error,
+    required TResult Function(BasePesananResponseModel dataOrder) success,
+    required TResult Function(BasePesananResponseModel messageError) error,
   }) {
     return loading();
   }
@@ -569,8 +569,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(OrderProdukResponseModel dataOrder)? success,
-    TResult? Function(String message)? error,
+    TResult? Function(BasePesananResponseModel dataOrder)? success,
+    TResult? Function(BasePesananResponseModel messageError)? error,
   }) {
     return loading?.call();
   }
@@ -580,8 +580,8 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(OrderProdukResponseModel dataOrder)? success,
-    TResult Function(String message)? error,
+    TResult Function(BasePesananResponseModel dataOrder)? success,
+    TResult Function(BasePesananResponseModel messageError)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -638,7 +638,7 @@ abstract class _$$SuccessImplCopyWith<$Res> {
           _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
       __$$SuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({OrderProdukResponseModel dataOrder});
+  $Res call({BasePesananResponseModel dataOrder});
 }
 
 /// @nodoc
@@ -660,7 +660,7 @@ class __$$SuccessImplCopyWithImpl<$Res>
       null == dataOrder
           ? _value.dataOrder
           : dataOrder // ignore: cast_nullable_to_non_nullable
-              as OrderProdukResponseModel,
+              as BasePesananResponseModel,
     ));
   }
 }
@@ -671,7 +671,7 @@ class _$SuccessImpl implements _Success {
   const _$SuccessImpl(this.dataOrder);
 
   @override
-  final OrderProdukResponseModel dataOrder;
+  final BasePesananResponseModel dataOrder;
 
   @override
   String toString() {
@@ -703,8 +703,8 @@ class _$SuccessImpl implements _Success {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(OrderProdukResponseModel dataOrder) success,
-    required TResult Function(String message) error,
+    required TResult Function(BasePesananResponseModel dataOrder) success,
+    required TResult Function(BasePesananResponseModel messageError) error,
   }) {
     return success(dataOrder);
   }
@@ -714,8 +714,8 @@ class _$SuccessImpl implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(OrderProdukResponseModel dataOrder)? success,
-    TResult? Function(String message)? error,
+    TResult? Function(BasePesananResponseModel dataOrder)? success,
+    TResult? Function(BasePesananResponseModel messageError)? error,
   }) {
     return success?.call(dataOrder);
   }
@@ -725,8 +725,8 @@ class _$SuccessImpl implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(OrderProdukResponseModel dataOrder)? success,
-    TResult Function(String message)? error,
+    TResult Function(BasePesananResponseModel dataOrder)? success,
+    TResult Function(BasePesananResponseModel messageError)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -774,10 +774,10 @@ class _$SuccessImpl implements _Success {
 }
 
 abstract class _Success implements OrderProductState {
-  const factory _Success(final OrderProdukResponseModel dataOrder) =
+  const factory _Success(final BasePesananResponseModel dataOrder) =
       _$SuccessImpl;
 
-  OrderProdukResponseModel get dataOrder;
+  BasePesananResponseModel get dataOrder;
 
   /// Create a copy of OrderProductState
   /// with the given fields replaced by the non-null parameter values.
@@ -792,7 +792,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
           _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
       __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String message});
+  $Res call({BasePesananResponseModel messageError});
 }
 
 /// @nodoc
@@ -808,13 +808,13 @@ class __$$ErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = null,
+    Object? messageError = null,
   }) {
     return _then(_$ErrorImpl(
-      null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
+      null == messageError
+          ? _value.messageError
+          : messageError // ignore: cast_nullable_to_non_nullable
+              as BasePesananResponseModel,
     ));
   }
 }
@@ -822,14 +822,14 @@ class __$$ErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ErrorImpl implements _Error {
-  const _$ErrorImpl(this.message);
+  const _$ErrorImpl(this.messageError);
 
   @override
-  final String message;
+  final BasePesananResponseModel messageError;
 
   @override
   String toString() {
-    return 'OrderProductState.error(message: $message)';
+    return 'OrderProductState.error(messageError: $messageError)';
   }
 
   @override
@@ -837,11 +837,12 @@ class _$ErrorImpl implements _Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ErrorImpl &&
-            (identical(other.message, message) || other.message == message));
+            (identical(other.messageError, messageError) ||
+                other.messageError == messageError));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message);
+  int get hashCode => Object.hash(runtimeType, messageError);
 
   /// Create a copy of OrderProductState
   /// with the given fields replaced by the non-null parameter values.
@@ -856,10 +857,10 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(OrderProdukResponseModel dataOrder) success,
-    required TResult Function(String message) error,
+    required TResult Function(BasePesananResponseModel dataOrder) success,
+    required TResult Function(BasePesananResponseModel messageError) error,
   }) {
-    return error(message);
+    return error(messageError);
   }
 
   @override
@@ -867,10 +868,10 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(OrderProdukResponseModel dataOrder)? success,
-    TResult? Function(String message)? error,
+    TResult? Function(BasePesananResponseModel dataOrder)? success,
+    TResult? Function(BasePesananResponseModel messageError)? error,
   }) {
-    return error?.call(message);
+    return error?.call(messageError);
   }
 
   @override
@@ -878,12 +879,12 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(OrderProdukResponseModel dataOrder)? success,
-    TResult Function(String message)? error,
+    TResult Function(BasePesananResponseModel dataOrder)? success,
+    TResult Function(BasePesananResponseModel messageError)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(message);
+      return error(messageError);
     }
     return orElse();
   }
@@ -927,9 +928,10 @@ class _$ErrorImpl implements _Error {
 }
 
 abstract class _Error implements OrderProductState {
-  const factory _Error(final String message) = _$ErrorImpl;
+  const factory _Error(final BasePesananResponseModel messageError) =
+      _$ErrorImpl;
 
-  String get message;
+  BasePesananResponseModel get messageError;
 
   /// Create a copy of OrderProductState
   /// with the given fields replaced by the non-null parameter values.

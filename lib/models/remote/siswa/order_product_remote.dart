@@ -5,11 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
+import 'package:kursus_mengemudi_nasional/models/response/siswa/add_order_product_response.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/order_product_response.dart';
 import 'package:kursus_mengemudi_nasional/utils/api.dart';
 
 class OrderProductRemoteDatasource {
-  Future<Either<String, OrderProdukResponseModel>> orderProduct(
+  Future<Either<BasePesananResponseModel, BasePesananResponseModel>> orderProduct(
     OrderProdukRequestModel request,
   ) async {
     final authData = await AuthlocalDatasource().getLoginData();
@@ -27,10 +28,10 @@ class OrderProductRemoteDatasource {
     if (response.statusCode == 201) {
       debugPrint("RESPONSE BODY: ${response.body}");
       final decodedJson = jsonDecode(response.body);
-      final model = OrderProdukResponseModel.fromMap(decodedJson);
+      final model = BasePesananResponseModel.fromMap(decodedJson);
       return Right(model);
     } else {
-      return Left(response.body);
+      return Left(BasePesananResponseModel.fromMap(jsonDecode(response.body)));
     }
   }
 
@@ -42,7 +43,7 @@ class OrderProductRemoteDatasource {
     };
     final response = await http.get(
       Uri.parse(
-        ApiEndpoint.orderData,
+        ApiEndpoint.orderDataKeranjang,
       ),
       headers: headers,
     );

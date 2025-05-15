@@ -7,7 +7,6 @@ import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/product_response.dart';
 import 'package:kursus_mengemudi_nasional/screens/cart_page.dart';
-import 'package:kursus_mengemudi_nasional/screens/main_nav.dart';
 import 'package:kursus_mengemudi_nasional/utils/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:kursus_mengemudi_nasional/widget/dialog_loading.dart';
@@ -20,6 +19,8 @@ class PackagePage extends StatefulWidget {
 }
 
 class _PackagePageState extends State<PackagePage> {
+  bool _hasNavigated = false;
+  bool _hasShownSnackbar = false;
   final NumberFormat currencyFormat = NumberFormat.currency(
     locale: 'id',
     symbol: 'Rp ',
@@ -521,57 +522,57 @@ class _PackagePageState extends State<PackagePage> {
     return BlocConsumer<OrderProductBloc, OrderProductState>(
       listener: (context, state) {
         state.maybeWhen(
-          orElse: () {},
-          loading: () {
-            // Tampilkan dialog sebagai modal
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) =>
-                    const DialogLoading(), // Pisahkan widget dialog agar reusable
-              );
-            });
-          },
           success: (dataOrder) {
-            // Tutup dialog
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            }
+            if (!_hasNavigated) {
+              _hasNavigated = true;
 
-            // Arahkan ke ChartPage
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const ChartPage(), 
-                ),
-                (route) => false,
-              );
-            });
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // tutup dialog loading
+              }
+
+              if (dataOrder.success == true) {
+                showSuccessDialog(context);
+              }
+            }
           },
+          error: (messageError) {
+            if (!_hasShownSnackbar) {
+              _hasShownSnackbar = true;
+
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // tutup dialog loading
+              }
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(messageError.message),
+                      backgroundColor: Colors.red),
+                );
+              });
+
+              // Reset flag setelah beberapa detik (opsional)
+              Future.delayed(const Duration(seconds: 3), () {
+                _hasShownSnackbar = false;
+              });
+            }
+          },
+          orElse: () {},
         );
       },
       builder: (context, state) {
         return SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: state.maybeWhen(
-              loading: () => null,
-              orElse: () {
-                return () {
-                  final request = OrderProdukRequestModel(
-                    idPaket: package.id,
-                    mobil: Constants.cars[1],
-                  );
-                  debugPrint(request.toJson());
-                  context
-                      .read<OrderProductBloc>()
-                      .add(OrderProductEvent.orderProduct(request));
-                };
-              },
-            ),
+            onPressed: () {
+              final request = OrderProdukRequestModel(
+                idPaket: package.id,
+                mobil: Constants.cars[1],
+              );
+              context
+                  .read<OrderProductBloc>()
+                  .add(OrderProductEvent.orderProduct(request));
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
@@ -581,33 +582,75 @@ class _PackagePageState extends State<PackagePage> {
               ),
               elevation: 0,
             ),
-            child: state.maybeWhen(
-              loading: () => const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              ),
-              orElse: () => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.shopping_cart_rounded),
-                  const SizedBox(width: 10),
-                  const Text(
-                    'PILIH PAKET INI',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.shopping_cart_rounded),
+                SizedBox(width: 10),
+                Text(
+                  'PILIH PAKET INI',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
       },
     );
   }
+}
+
+void showSuccessDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      contentPadding: const EdgeInsets.all(24),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.check_circle_rounded,
+            color: Colors.green,
+            size: 64,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Pesanan berhasil ditambahkan",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Tutup dialog
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ChartPage()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text("OK"),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
