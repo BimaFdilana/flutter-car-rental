@@ -64,38 +64,91 @@ class _ChartPageState extends State<ChartPage> {
           ),
         ],
       ),
-      body: BlocConsumer<OrderDataBloc, OrderDataState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            orElse: () {},
-          );
-        },
-        builder: (context, state) {
-          return state.maybeWhen(
-            initial: () => _buildEmptyState(
-              icon: Icons.inbox_rounded,
-              message: 'Belum ada data pesanan',
-            ),
-            loading: () => const Center(
-              child: CircularProgressIndicator(
-                color: Colors.blueAccent,
-              ),
-            ),
-            loaded: (data) {
-              final pesanan = data.pesanan;
-              return _buildOrderDetails(pesanan);
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<AddJadwalBloc, AddJadwalState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                success: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message.message),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+                error: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message.message),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                },
+                orElse: () {},
+              );
             },
-            error: (message) => _buildEmptyState(
-              icon: Icons.error_outline_rounded,
-              message: 'Keranjang Kosong',
-              showRefresh: true,
-            ),
-            orElse: () => _buildEmptyState(
-              icon: Icons.help_outline_rounded,
-              message: 'Status tidak dikenali',
-            ),
-          );
-        },
+          ),
+          BlocListener<UploadImageBloc, UploadImageState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                success: (uploadMessage) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(uploadMessage.message),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  context
+                      .read<OrderDataBloc>()
+                      .add(const OrderDataEvent.getOrderData());
+                },
+                error: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                },
+                orElse: () {},
+              );
+            },
+          ),
+        ],
+        child: BlocConsumer<OrderDataBloc, OrderDataState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () {},
+            );
+          },
+          builder: (context, state) {
+            return state.maybeWhen(
+              initial: () => _buildEmptyState(
+                icon: Icons.inbox_rounded,
+                message: 'Belum ada data pesanan',
+              ),
+              loading: () => const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blueAccent,
+                ),
+              ),
+              loaded: (data) {
+                final pesanan = data.pesanan;
+                return _buildOrderDetails(pesanan);
+              },
+              error: (message) => _buildEmptyState(
+                icon: Icons.error_outline_rounded,
+                message: 'Keranjang Kosong',
+                showRefresh: true,
+              ),
+              orElse: () => _buildEmptyState(
+                icon: Icons.help_outline_rounded,
+                message: 'Status tidak dikenali',
+              ),
+            );
+          },
+        ),
       ),
     );
   }

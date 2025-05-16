@@ -101,39 +101,33 @@ class OrderProductRemoteDatasource {
     }
   }
 
-  Future<Either<SuccessAddJadwalResponseModel, SuccessAddJadwalResponseModel>>
+  Future<Either<ErrorAddJadwalResponseModel, SuccessAddJadwalResponseModel>>
       addJadwal({
     required AddJadwalRequestModel request,
   }) async {
-    try {
-      final authData = await AuthlocalDatasource().getLoginData();
-      final headers = {
-        'Authorization': 'Bearer ${authData.token}',
-        'Content-Type': 'application/json', // pastikan ini ada
-      };
+    final authData = await AuthlocalDatasource().getLoginData();
+    final headers = {
+      'Authorization': 'Bearer ${authData.token}',
+      'Content-Type': 'application/json', // pastikan ini ada
+    };
 
-      final url = ApiEndpoint.addJadwal
-          .replaceFirst('{id}', request.pesananId.toString());
+    final url = ApiEndpoint.addJadwal
+        .replaceFirst('{id}', request.pesananId.toString());
 
-      final response = await http.post(
-        Uri.parse(url),
-        headers: headers,
-        body: json.encode(request.toJson()),
-      );
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: json.encode(request.toJson()),
+    );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        debugPrint("Berhasil tambah jadwal: ${response.body}");
-        return Right(SuccessAddJadwalResponseModel.fromJson(data));
-      } else {
-        final data = json.decode(response.body);
-        debugPrint("Gagal tambah jadwal: ${response.body}");
-        return Left(SuccessAddJadwalResponseModel.fromJson(data));
-      }
-    } catch (e) {
-      debugPrint("Exception saat tambah jadwal: $e");
-      return Left(
-          SuccessAddJadwalResponseModel(success: false, message: e.toString()));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      debugPrint("Berhasil tambah jadwal: ${response.body}");
+      return Right(SuccessAddJadwalResponseModel.fromMap(data));
+    } else {
+      final data = json.decode(response.body);
+      debugPrint("Gagal tambah jadwal: ${response.body}");
+      return Left(ErrorAddJadwalResponseModel.fromMap(data));
     }
   }
 }

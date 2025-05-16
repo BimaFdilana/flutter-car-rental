@@ -241,7 +241,7 @@ mixin _$AddJadwalState {
             SuccessAddJadwalResponseModel addJadwalResponseSuccess)
         success,
     required TResult Function(
-            SuccessAddJadwalResponseModel addJadwalResponseError)
+            ErrorAddJadwalResponseModel addJadwalResponseError)
         error,
   }) =>
       throw _privateConstructorUsedError;
@@ -251,7 +251,7 @@ mixin _$AddJadwalState {
     TResult? Function()? loading,
     TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
+    TResult? Function(ErrorAddJadwalResponseModel addJadwalResponseError)?
         error,
   }) =>
       throw _privateConstructorUsedError;
@@ -261,8 +261,7 @@ mixin _$AddJadwalState {
     TResult Function()? loading,
     TResult Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
-        error,
+    TResult Function(ErrorAddJadwalResponseModel addJadwalResponseError)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -361,7 +360,7 @@ class _$InitialImpl implements _Initial {
             SuccessAddJadwalResponseModel addJadwalResponseSuccess)
         success,
     required TResult Function(
-            SuccessAddJadwalResponseModel addJadwalResponseError)
+            ErrorAddJadwalResponseModel addJadwalResponseError)
         error,
   }) {
     return initial();
@@ -374,7 +373,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? loading,
     TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
+    TResult? Function(ErrorAddJadwalResponseModel addJadwalResponseError)?
         error,
   }) {
     return initial?.call();
@@ -387,8 +386,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? loading,
     TResult Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
-        error,
+    TResult Function(ErrorAddJadwalResponseModel addJadwalResponseError)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -486,7 +484,7 @@ class _$LoadingImpl implements _Loading {
             SuccessAddJadwalResponseModel addJadwalResponseSuccess)
         success,
     required TResult Function(
-            SuccessAddJadwalResponseModel addJadwalResponseError)
+            ErrorAddJadwalResponseModel addJadwalResponseError)
         error,
   }) {
     return loading();
@@ -499,7 +497,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? loading,
     TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
+    TResult? Function(ErrorAddJadwalResponseModel addJadwalResponseError)?
         error,
   }) {
     return loading?.call();
@@ -512,8 +510,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? loading,
     TResult Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
-        error,
+    TResult Function(ErrorAddJadwalResponseModel addJadwalResponseError)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -640,7 +637,7 @@ class _$SuccessImpl implements _Success {
             SuccessAddJadwalResponseModel addJadwalResponseSuccess)
         success,
     required TResult Function(
-            SuccessAddJadwalResponseModel addJadwalResponseError)
+            ErrorAddJadwalResponseModel addJadwalResponseError)
         error,
   }) {
     return success(addJadwalResponseSuccess);
@@ -653,7 +650,7 @@ class _$SuccessImpl implements _Success {
     TResult? Function()? loading,
     TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
+    TResult? Function(ErrorAddJadwalResponseModel addJadwalResponseError)?
         error,
   }) {
     return success?.call(addJadwalResponseSuccess);
@@ -666,8 +663,7 @@ class _$SuccessImpl implements _Success {
     TResult Function()? loading,
     TResult Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
-        error,
+    TResult Function(ErrorAddJadwalResponseModel addJadwalResponseError)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -734,7 +730,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
           _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
       __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({SuccessAddJadwalResponseModel addJadwalResponseError});
+  $Res call({ErrorAddJadwalResponseModel addJadwalResponseError});
 }
 
 /// @nodoc
@@ -756,7 +752,7 @@ class __$$ErrorImplCopyWithImpl<$Res>
       null == addJadwalResponseError
           ? _value.addJadwalResponseError
           : addJadwalResponseError // ignore: cast_nullable_to_non_nullable
-              as SuccessAddJadwalResponseModel,
+              as ErrorAddJadwalResponseModel,
     ));
   }
 }
@@ -767,7 +763,7 @@ class _$ErrorImpl implements _Error {
   const _$ErrorImpl(this.addJadwalResponseError);
 
   @override
-  final SuccessAddJadwalResponseModel addJadwalResponseError;
+  final ErrorAddJadwalResponseModel addJadwalResponseError;
 
   @override
   String toString() {
@@ -803,7 +799,7 @@ class _$ErrorImpl implements _Error {
             SuccessAddJadwalResponseModel addJadwalResponseSuccess)
         success,
     required TResult Function(
-            SuccessAddJadwalResponseModel addJadwalResponseError)
+            ErrorAddJadwalResponseModel addJadwalResponseError)
         error,
   }) {
     return error(addJadwalResponseError);
@@ -816,7 +812,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? loading,
     TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult? Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
+    TResult? Function(ErrorAddJadwalResponseModel addJadwalResponseError)?
         error,
   }) {
     return error?.call(addJadwalResponseError);
@@ -829,8 +825,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? loading,
     TResult Function(SuccessAddJadwalResponseModel addJadwalResponseSuccess)?
         success,
-    TResult Function(SuccessAddJadwalResponseModel addJadwalResponseError)?
-        error,
+    TResult Function(ErrorAddJadwalResponseModel addJadwalResponseError)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -879,9 +874,9 @@ class _$ErrorImpl implements _Error {
 
 abstract class _Error implements AddJadwalState {
   const factory _Error(
-      final SuccessAddJadwalResponseModel addJadwalResponseError) = _$ErrorImpl;
+      final ErrorAddJadwalResponseModel addJadwalResponseError) = _$ErrorImpl;
 
-  SuccessAddJadwalResponseModel get addJadwalResponseError;
+  ErrorAddJadwalResponseModel get addJadwalResponseError;
 
   /// Create a copy of AddJadwalState
   /// with the given fields replaced by the non-null parameter values.
