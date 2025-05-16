@@ -15,4 +15,6 @@ class ApiEndpoint {
   static const String orderProduct = '${BaseUrl.baseUrl}${Api.api}/pesanan';
   static const String orderDataKeranjang = '${BaseUrl.baseUrl}${Api.api}/siswa/lihat-pesanan';
   static const String uploadBuktiPembayaran = '${BaseUrl.baseUrl}${Api.api}/pesanan/{id}/bukti';
+  static const String addJadwal =
+      '${BaseUrl.baseUrl}${Api.api}/siswa/add-jadwal/{id}';
 }

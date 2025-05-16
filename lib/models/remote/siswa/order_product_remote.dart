@@ -4,8 +4,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
+import 'package:kursus_mengemudi_nasional/models/request/siswa/add_jadwal_request.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/upload_bukti_pembayaran.dart';
+import 'package:kursus_mengemudi_nasional/models/response/siswa/add_jadwal_response.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/add_order_product_response.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/order_product_response.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/success_upload_response.dart';
@@ -96,6 +98,42 @@ class OrderProductRemoteDatasource {
       }
     } catch (e) {
       return Left("Terjadi kesalahan: $e");
+    }
+  }
+
+  Future<Either<SuccessAddJadwalResponseModel, SuccessAddJadwalResponseModel>>
+      addJadwal({
+    required AddJadwalRequestModel request,
+  }) async {
+    try {
+      final authData = await AuthlocalDatasource().getLoginData();
+      final headers = {
+        'Authorization': 'Bearer ${authData.token}',
+        'Content-Type': 'application/json', // pastikan ini ada
+      };
+
+      final url = ApiEndpoint.addJadwal
+          .replaceFirst('{id}', request.pesananId.toString());
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: json.encode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        debugPrint("Berhasil tambah jadwal: ${response.body}");
+        return Right(SuccessAddJadwalResponseModel.fromJson(data));
+      } else {
+        final data = json.decode(response.body);
+        debugPrint("Gagal tambah jadwal: ${response.body}");
+        return Left(SuccessAddJadwalResponseModel.fromJson(data));
+      }
+    } catch (e) {
+      debugPrint("Exception saat tambah jadwal: $e");
+      return Left(
+          SuccessAddJadwalResponseModel(success: false, message: e.toString()));
     }
   }
 }

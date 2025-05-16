@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/upload_image/upload_image_bloc.dart';
+import 'package:kursus_mengemudi_nasional/models/request/siswa/add_jadwal_request.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/upload_bukti_pembayaran.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/jadwal_convert.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/order_product_response.dart';
@@ -145,7 +147,7 @@ class _ChartPageState extends State<ChartPage> {
             if (pesanan.buktiPembayaran == null) _buildUploadProof(pesanan),
             if (pesanan.buktiPembayaran != null &&
                 pesanan.status.toLowerCase() != 'completed')
-              _buildActionButtons(),
+              _buildActionButtons(pesanan),
           ],
         ),
       ),
@@ -671,7 +673,7 @@ class _ChartPageState extends State<ChartPage> {
     }
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(Pesanan pesanan) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
@@ -679,7 +681,7 @@ class _ChartPageState extends State<ChartPage> {
           Expanded(
             child: ElevatedButton.icon(
               onPressed: () {
-                // Implement jadwalkan action
+                _showAddJadwalForm(pesanan);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
@@ -697,7 +699,6 @@ class _ChartPageState extends State<ChartPage> {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -782,6 +783,226 @@ class _ChartPageState extends State<ChartPage> {
                 ),
               ),
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAddJadwalForm(Pesanan pesanan) {
+    List<Map<String, dynamic>> jadwalList = [{}];
+
+    String formatTimeOfDay(TimeOfDay time) {
+      final hour = time.hour.toString().padLeft(2, '0');
+      final minute = time.minute.toString().padLeft(2, '0');
+      return '$hour:$minute';
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: const Text(
+                            'Tambah Jadwal',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                        // icon cicrle Button
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blueAccent,
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.add),
+                            color: Colors.white,
+                            onPressed: () {
+                              setModalState(() {
+                                jadwalList.add({});
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    ...List.generate(jadwalList.length, (index) {
+                      final item = jadwalList[index];
+                      return Card(
+                        elevation: 1,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.calendar_today,
+                                    color: Colors.blue),
+                                title: Text(item['tanggal'] ?? 'Pilih Tanggal'),
+                                onTap: () async {
+                                  final picked = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (picked != null) {
+                                    setModalState(() {
+                                      jadwalList[index]['tanggal'] =
+                                          "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                                    });
+                                  }
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.access_time,
+                                    color: Colors.green),
+                                title: Text(
+                                    item['waktu_mulai'] ?? 'Pilih Waktu Mulai'),
+                                onTap: () async {
+                                  final picked = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                    builder: (context, child) {
+                                      return MediaQuery(
+                                        data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: true,
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  );
+                                  if (picked != null) {
+                                    setModalState(() {
+                                      jadwalList[index]['waktu_mulai'] =
+                                          formatTimeOfDay(picked);
+                                    });
+                                  }
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.access_time_filled,
+                                    color: Colors.red),
+                                title: Text(item['waktu_selesai'] ??
+                                    'Pilih Waktu Selesai'),
+                                onTap: () async {
+                                  final picked = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                    builder: (context, child) {
+                                      return MediaQuery(
+                                        data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: true,
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  );
+                                  if (picked != null) {
+                                    setModalState(() {
+                                      jadwalList[index]['waktu_selesai'] =
+                                          formatTimeOfDay(picked);
+                                    });
+                                  }
+                                },
+                              ),
+                              if (jadwalList.length > 1)
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.redAccent),
+                                    onPressed: () {
+                                      setModalState(() {
+                                        jadwalList.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                        final validJadwal = jadwalList
+                            .where((item) =>
+                                item['tanggal'] != null &&
+                                item['waktu_mulai'] != null &&
+                                item['waktu_selesai'] != null)
+                            .toList();
+
+                        if (validJadwal.isNotEmpty) {
+                          final request = AddJadwalRequestModel(
+                            pesananId: pesanan.id,
+                            jadwal: validJadwal
+                                .map((e) => JadwalItem(
+                                      tanggal: e['tanggal']!,
+                                      waktuMulai: e['waktu_mulai']!,
+                                      waktuSelesai: e['waktu_selesai']!,
+                                    ))
+                                .toList(),
+                          );
+
+                          context.read<AddJadwalBloc>().add(
+                                AddJadwalEvent.addJadwal(request),
+                              );
+
+                          Navigator.pop(context);
+
+                          context
+                              .read<OrderDataBloc>()
+                              .add(const OrderDataEvent.getOrderData());
+                        }
+                      },
+                      child: const Center(
+                        child: Text(
+                          'Kirim Semua Jadwal',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              );
+            },
           ),
         );
       },

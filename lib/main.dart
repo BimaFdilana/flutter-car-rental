@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/local_user/local_user_bloc.dart';
 
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
@@ -68,6 +69,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => UploadImageBloc(
             orderProductRemote: OrderProductRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AddJadwalBloc(
+            orderProductRemoteDatasource: OrderProductRemoteDatasource(),
           ),
         ),
       ],
