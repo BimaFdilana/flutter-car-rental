@@ -124,7 +124,9 @@ class _ChartPageState extends State<ChartPage> {
             const SizedBox(height: 24),
             _buildOrderDetailCard(pesanan),
             const SizedBox(height: 16),
-            if (pesanan.status.toLowerCase() != 'completed')
+            if (pesanan.buktiPembayaran == null) _buildUploadProof(),
+            if (pesanan.buktiPembayaran != null &&
+                pesanan.status.toLowerCase() != 'completed')
               _buildActionButtons(),
           ],
         ),
@@ -697,24 +699,43 @@ class _ChartPageState extends State<ChartPage> {
     );
   }
 
-  Widget _buildRefreshButton() {
-    return ElevatedButton.icon(
-      onPressed: () {
-        context.read<OrderDataBloc>().add(const OrderDataEvent.getOrderData());
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blueAccent,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        elevation: 0,
-      ),
-      icon: const Icon(Icons.refresh_rounded),
-      label: const Text(
-        'Muat Ulang Data',
-        style: TextStyle(fontWeight: FontWeight.w600),
+  Widget _buildUploadProof() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              icon: const Icon(Icons.car_crash_outlined),
+              label: const Text(
+                'Unggah Bukti Pembayaran',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.payment,
+                color: Colors.redAccent,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

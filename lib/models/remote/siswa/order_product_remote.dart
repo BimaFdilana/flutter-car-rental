@@ -5,12 +5,15 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
+import 'package:kursus_mengemudi_nasional/models/request/siswa/upload_bukti_pembayaran.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/add_order_product_response.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/order_product_response.dart';
+import 'package:kursus_mengemudi_nasional/models/response/siswa/success_upload_response.dart';
 import 'package:kursus_mengemudi_nasional/utils/api.dart';
 
 class OrderProductRemoteDatasource {
-  Future<Either<BasePesananResponseModel, BasePesananResponseModel>> orderProduct(
+  Future<Either<BasePesananResponseModel, BasePesananResponseModel>>
+      orderProduct(
     OrderProdukRequestModel request,
   ) async {
     final authData = await AuthlocalDatasource().getLoginData();
@@ -57,6 +60,42 @@ class OrderProductRemoteDatasource {
       }
     } else {
       return Left(response.body);
+    }
+  }
+
+  Future<Either<String, SuccessUploadResponseModel>> uploadBuktiPembayaran(
+      UploadBuktiPembayaranRequestModel model) async {
+    try {
+      final authData = await AuthlocalDatasource().getLoginData();
+      final headers = {
+        'Authorization': 'Bearer ${authData.token}',
+      };
+
+      final String endpoint = ApiEndpoint.uploadBuktiPembayaran.replaceFirst(
+        '{id}',
+        model.pesananId.toString(),
+      );
+
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(endpoint),
+      )..headers.addAll(headers);
+
+      request.files.add(await http.MultipartFile.fromPath(
+        'bukti_pembayaran',
+        model.bukti.path,
+      ));
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        return Right(SuccessUploadResponseModel.fromJson(response.body));
+      } else {
+        return Left("Gagal upload: ${response.body}");
+      }
+    } catch (e) {
+      return Left("Terjadi kesalahan: $e");
     }
   }
 }

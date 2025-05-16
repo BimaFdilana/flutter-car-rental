@@ -9,7 +9,6 @@ import 'package:kursus_mengemudi_nasional/models/response/siswa/product_response
 import 'package:kursus_mengemudi_nasional/screens/cart_page.dart';
 import 'package:kursus_mengemudi_nasional/utils/constants.dart';
 import 'package:intl/intl.dart';
-import 'package:kursus_mengemudi_nasional/widget/dialog_loading.dart';
 
 class PackagePage extends StatefulWidget {
   const PackagePage({super.key});
@@ -47,14 +46,6 @@ class _PackagePageState extends State<PackagePage> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh_rounded),
-            onPressed: () {
-              context.read<ProductBloc>().add(const ProductEvent.getProducts());
-            },
-          ),
-        ],
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
