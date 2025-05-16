@@ -7,6 +7,7 @@ import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/product_response.dart';
 import 'package:kursus_mengemudi_nasional/screens/cart_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/main_nav.dart';
 import 'package:kursus_mengemudi_nasional/utils/constants.dart';
 import 'package:intl/intl.dart';
 
@@ -624,9 +625,11 @@ void showSuccessDialog(BuildContext context) {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.pop(context); // Tutup dialog
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (_) => const ChartPage()),
+                  MaterialPageRoute(
+                    builder: (_) => const MainNavigation(initialIndex: 1),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(

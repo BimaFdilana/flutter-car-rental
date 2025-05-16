@@ -82,7 +82,7 @@ class OrderProductRemoteDatasource {
       )..headers.addAll(headers);
 
       request.files.add(await http.MultipartFile.fromPath(
-        'bukti_pembayaran',
+        'bukti',
         model.bukti.path,
       ));
 

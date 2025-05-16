@@ -7,6 +7,7 @@ import 'package:kursus_mengemudi_nasional/logic/orderProduct/order_product_bloc.
 import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/upload_image/upload_image_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/auth/auth_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/order_product_remote.dart';
@@ -62,6 +63,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => OrderDataBloc(
             remoteDatasource: OrderProductRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => UploadImageBloc(
+            orderProductRemote: OrderProductRemoteDatasource(),
           ),
         ),
       ],

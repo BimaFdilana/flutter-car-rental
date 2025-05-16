@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/upload_image/upload_image_bloc.dart';
+import 'package:kursus_mengemudi_nasional/models/request/siswa/upload_bukti_pembayaran.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/jadwal_convert.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/order_product_response.dart';
 
@@ -12,6 +17,19 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
+  File? _buktiPembayaran;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _buktiPembayaran = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -124,7 +142,7 @@ class _ChartPageState extends State<ChartPage> {
             const SizedBox(height: 24),
             _buildOrderDetailCard(pesanan),
             const SizedBox(height: 16),
-            if (pesanan.buktiPembayaran == null) _buildUploadProof(),
+            if (pesanan.buktiPembayaran == null) _buildUploadProof(pesanan),
             if (pesanan.buktiPembayaran != null &&
                 pesanan.status.toLowerCase() != 'completed')
               _buildActionButtons(),
@@ -368,7 +386,6 @@ class _ChartPageState extends State<ChartPage> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                // Cek apakah jadwal kosong
                 if (listJadwal.isEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
@@ -675,68 +692,99 @@ class _ChartPageState extends State<ChartPage> {
               ),
               icon: const Icon(Icons.calendar_month_rounded),
               label: const Text(
-                'Jadwalkan Kursus',
+                'Tambah Jadwal Kursus',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: Colors.blueAccent.withOpacity(0.1),
-            child: IconButton(
-              onPressed: () {
-                // Implement contact support
-              },
-              icon: const Icon(
-                Icons.support_agent_rounded,
-                color: Colors.blueAccent,
-              ),
-            ),
-          ),
+
         ],
       ),
     );
   }
 
-  Widget _buildUploadProof() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+  Widget _buildUploadProof(Pesanan pesanan) {
+    return BlocConsumer<UploadImageBloc, UploadImageState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          success: (uploadMessage) {
+            debugPrint(uploadMessage.message);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(uploadMessage.message),
+                backgroundColor: Colors.green,
+              ),
+            );
+            context
+                .read<OrderDataBloc>()
+                .add(const OrderDataEvent.getOrderData());
+          },
+          error: (message) {
+            debugPrint(message);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+          orElse: () {},
+        );
+      },
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            children: [
+              const SizedBox(height: 12),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  _buktiPembayaran?.path ?? 'No Image Selected',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
                 ),
-                elevation: 0,
               ),
-              icon: const Icon(Icons.car_crash_outlined),
-              label: const Text(
-                'Unggah Bukti Pembayaran',
-                style: TextStyle(fontWeight: FontWeight.w600),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 2,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    if (_buktiPembayaran == null) {
+                      _pickImage();
+                      return;
+                    }
+                    final requestUpload = UploadBuktiPembayaranRequestModel(
+                      pesananId: pesanan.id,
+                      bukti: File(_buktiPembayaran!.path),
+                    );
+                    debugPrint(requestUpload.bukti.path.toString());
+                    context.read<UploadImageBloc>().add(
+                          UploadImageEvent.upload(requestUpload),
+                        );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
+                  ),
+                  label: const Text(
+                    'Kirim Bukti',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          const SizedBox(width: 12),
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.payment,
-                color: Colors.redAccent,
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
