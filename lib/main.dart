@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart';
@@ -13,8 +15,10 @@ import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/auth/auth_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/order_product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/product_remote.dart';
-import 'package:kursus_mengemudi_nasional/screens/main_nav.dart';
-import 'package:kursus_mengemudi_nasional/screens/login_page.dart';
+import 'package:kursus_mengemudi_nasional/models/response/login_response.dart';
+import 'package:kursus_mengemudi_nasional/screens/instruktur/home.dart';
+import 'package:kursus_mengemudi_nasional/screens/siswa/main_nav.dart';
+import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
 
 import 'logic/login/login_bloc.dart';
 import 'utils/theme.dart';
@@ -81,12 +85,21 @@ class MyApp extends StatelessWidget {
         title: 'NASIONAL Kursus Mengemudi',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        home: FutureBuilder<bool>(
-          future: AuthlocalDatasource().isLoginData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data!) {
-                return const MainNavigation();
+        home: FutureBuilder<LoginResponseModel>(
+          future: AuthlocalDatasource().getLoginData(),
+          builder: (context, loginSnapshot) {
+            if (loginSnapshot.connectionState == ConnectionState.done) {
+              if (loginSnapshot.hasData) {
+                final user = loginSnapshot.data!.user;
+                final role = user.role;
+
+                if (role == 'Siswa' || role == 'siswa') {
+                  return const MainNavigation();
+                } else if (role == 'Instruktur' || role == 'instruktur') {
+                  return const JadwalPage();
+                } else {
+                  return const LoginPage();
+                }
               } else {
                 return const LoginPage();
               }

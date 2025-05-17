@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kursus_mengemudi_nasional/screens/cart_page.dart';
-import 'package:kursus_mengemudi_nasional/screens/package_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/siswa/cart_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/siswa/package_page.dart';
 import 'package:kursus_mengemudi_nasional/screens/profile_page.dart';
 import 'package:kursus_mengemudi_nasional/utils/theme.dart';
 
