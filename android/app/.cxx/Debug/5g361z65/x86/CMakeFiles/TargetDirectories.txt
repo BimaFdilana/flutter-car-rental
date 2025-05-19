@@ -1,0 +1,2 @@
+/Users/smc/Desktop/ki/kursus_mengemudi_nasional/android/app/.cxx/Debug/5g361z65/x86/CMakeFiles/edit_cache.dir
+/Users/smc/Desktop/ki/kursus_mengemudi_nasional/android/app/.cxx/Debug/5g361z65/x86/CMakeFiles/rebuild_cache.dir

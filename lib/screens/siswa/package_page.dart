@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kursus_mengemudi_nasional/logic/orderProduct/order_product_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/order_product/order_product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/product_response.dart';

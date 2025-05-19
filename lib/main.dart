@@ -6,10 +6,11 @@ import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart'
 import 'package:kursus_mengemudi_nasional/logic/local_user/local_user_bloc.dart';
 
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
-import 'package:kursus_mengemudi_nasional/logic/orderProduct/order_product_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/order_product/order_product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/update_status_instruktur/update_status_instruktut_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/upload_image/upload_image_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/user_status/user_status_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
@@ -85,6 +86,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => UserStatusBloc(
             remoteDatasource: InstrukturRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => UpdateStatusInstruktutBloc(
+            instrukturRemote: InstrukturRemoteDatasource(),
           ),
         ),
       ],

@@ -1,5 +1,5 @@
 class BaseUrl {
-  static const String baseUrl = 'http://192.168.88.8:8000';
+  static const String baseUrl = 'http://192.168.88.6:8000';
 }
 
 class Api {
@@ -24,4 +24,6 @@ class ApiEndpoint {
 // Instruktur
   static const String userStatus =
       '${BaseUrl.baseUrl}${Api.api}/instruktur/all-user';
+  static const String ubahJadwal =
+      '${BaseUrl.baseUrl}${Api.api}/instruktur/update-jadwal-status/{id}';
 }
