@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/all_jadwal/all_jadwal_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/all_pesanan/all_pesanan_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/local_user/local_user_bloc.dart';
 
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
@@ -16,10 +18,13 @@ import 'package:kursus_mengemudi_nasional/logic/user_status/user_status_bloc.dar
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/auth/auth_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/instruktur/instruktur_remote.dart';
+import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_jadwal_remote.dart';
+import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_pesanan_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/order_product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/response/login_response.dart';
-import 'package:kursus_mengemudi_nasional/screens/instruktur/home.dart';
+import 'package:kursus_mengemudi_nasional/screens/instruktur/instruktur.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/dashboard_kasir.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/main_nav.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
 
@@ -93,6 +98,16 @@ class MyApp extends StatelessWidget {
             instrukturRemote: InstrukturRemoteDatasource(),
           ),
         ),
+        BlocProvider(
+          create: (context) => AllPesananBloc(
+            remoteAllproduct: AllPesananRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AllJadwalBloc(
+            remoteAllproduct: AllJadwalRemoteDatasource(),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'NASIONAL Kursus Mengemudi',
@@ -105,11 +120,12 @@ class MyApp extends StatelessWidget {
               if (loginSnapshot.hasData) {
                 final user = loginSnapshot.data!.user;
                 final role = user.role;
-
                 if (role == 'Siswa' || role == 'siswa') {
                   return const MainNavigation();
                 } else if (role == 'Instruktur' || role == 'instruktur') {
                   return const JadwalPage();
+                } else if (role == 'Kasir' || role == 'kasir') {
+                  return const DashboardKasir();
                 } else {
                   return const LoginPage();
                 }

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_product/order_product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
@@ -19,6 +20,7 @@ class PackagePage extends StatefulWidget {
 }
 
 class _PackagePageState extends State<PackagePage> {
+  final rekening = "13456575345";
   bool _hasNavigated = false;
   bool _hasShownSnackbar = false;
   final NumberFormat currencyFormat = NumberFormat.currency(
@@ -151,7 +153,7 @@ class _PackagePageState extends State<PackagePage> {
               itemCount: data.data.length,
               itemBuilder: (context, index) {
                 final package = data.data[index];
-                return _buildPackageCard(package, context);
+                return _buildPackageCard(package, context, rekening);
               },
             ),
           ],
@@ -219,7 +221,8 @@ class _PackagePageState extends State<PackagePage> {
     );
   }
 
-  Widget _buildPackageCard(Datum package, BuildContext context) {
+  Widget _buildPackageCard(
+      Datum package, BuildContext context, String rekening) {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
@@ -337,7 +340,7 @@ class _PackagePageState extends State<PackagePage> {
                 const SizedBox(height: 24),
 
                 // Book Button
-                _buildBookButton(package, context),
+                _buildBookButton(package, context, rekening),
               ],
             ),
           ),
@@ -510,7 +513,8 @@ class _PackagePageState extends State<PackagePage> {
     );
   }
 
-  Widget _buildBookButton(Datum package, BuildContext context) {
+  Widget _buildBookButton(
+      Datum package, BuildContext context, String rekening) {
     return BlocConsumer<OrderProductBloc, OrderProductState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -523,7 +527,7 @@ class _PackagePageState extends State<PackagePage> {
               }
 
               if (dataOrder.success == true) {
-                showSuccessDialog(context);
+                showSuccessDialog(context, rekening);
               }
             }
           },
@@ -595,55 +599,101 @@ class _PackagePageState extends State<PackagePage> {
   }
 }
 
-void showSuccessDialog(BuildContext context) {
+void showSuccessDialog(BuildContext context, String rekening) {
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (_) => AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      contentPadding: const EdgeInsets.all(24),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.check_circle_rounded,
-            color: Colors.green,
-            size: 64,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            "Pesanan berhasil ditambahkan",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+    builder: (_) => Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: 72,
             ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context); // Tutup dialog
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const MainNavigation(initialIndex: 1),
+            const SizedBox(height: 16),
+            const Text(
+              "Pesanan Berhasil!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "Silakan lakukan pembayaran ke nomor rekening berikut:",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.black87),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    rekening,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 20),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: rekening));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Nomor rekening disalin'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MainNavigation(initialIndex: 1),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "Selesai",
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
-              child: const Text("OK"),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );

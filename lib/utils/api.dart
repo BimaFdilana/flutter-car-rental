@@ -1,5 +1,6 @@
 class BaseUrl {
-  static const String baseUrl = 'http://192.168.88.6:8000';
+  static const String baseUrl = 'http://192.168.64.110:8000';
+  static const String storage = '$baseUrl/storage/';
 }
 
 class Api {
@@ -7,11 +8,12 @@ class Api {
 }
 
 class ApiEndpoint {
+  // Auth
   static const String login = '${BaseUrl.baseUrl}${Api.api}/login';
   static const String logout = '${BaseUrl.baseUrl}${Api.api}/logout';
   static const String register = '${BaseUrl.baseUrl}${Api.api}/register';
 
-// Siswa
+  // Siswa
   static const String shopProducts = '${BaseUrl.baseUrl}${Api.api}/paket';
   static const String orderProduct = '${BaseUrl.baseUrl}${Api.api}/pesanan';
   static const String orderDataKeranjang =
@@ -21,9 +23,13 @@ class ApiEndpoint {
   static const String addJadwal =
       '${BaseUrl.baseUrl}${Api.api}/siswa/add-jadwal/{id}';
 
-// Instruktur
+  // Instruktur
   static const String userStatus =
       '${BaseUrl.baseUrl}${Api.api}/instruktur/all-user';
   static const String ubahJadwal =
       '${BaseUrl.baseUrl}${Api.api}/instruktur/update-jadwal-status/{id}';
+
+  // Kasir
+  static const String allPesanan = '${BaseUrl.baseUrl}${Api.api}/pesanan';
+  static const String allJadwal = '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa';
 }

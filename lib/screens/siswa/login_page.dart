@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/login/login_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/request/login_request.dart';
-import 'package:kursus_mengemudi_nasional/screens/instruktur/home.dart';
+import 'package:kursus_mengemudi_nasional/screens/instruktur/instruktur.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/dashboard_kasir.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/main_nav.dart';
 import 'package:kursus_mengemudi_nasional/screens/register_page.dart';
 
@@ -151,8 +152,12 @@ class _LoginPageState extends State<LoginPage> {
                                 const Text('akun instruktur');
                               } else if (value.data.user.role == 'Kasir' ||
                                   value.data.user.role == 'kasir') {
-                                // comment
-                                const Text('akun kasir');
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DashboardKasir()),
+                                );
                               } else {
                                 const Text('akun belum terdaftar');
                               }

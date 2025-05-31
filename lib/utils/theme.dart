@@ -73,13 +73,13 @@ class AppTheme {
       ),
       hintStyle: const TextStyle(color: Colors.grey),
     ),
-    cardTheme: CardTheme(
-      color: Colors.white,
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    ),
+    // cardTheme: CardTheme(
+    //   color: Colors.white,
+    //   elevation: 3,
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.circular(12),
+    //   ),
+    //   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    // ),
   );
 }
