@@ -7,7 +7,6 @@ import 'package:kursus_mengemudi_nasional/logic/order_product/order_product_bloc
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/request/siswa/order_product_request.dart';
 import 'package:kursus_mengemudi_nasional/models/response/siswa/product_response.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/cart_page.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/main_nav.dart';
 import 'package:kursus_mengemudi_nasional/utils/constants.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +19,7 @@ class PackagePage extends StatefulWidget {
 }
 
 class _PackagePageState extends State<PackagePage> {
-  final rekening = "13456575345";
+  final rekening = "7463-01-008464-53-0";
   bool _hasNavigated = false;
   bool _hasShownSnackbar = false;
   final NumberFormat currencyFormat = NumberFormat.currency(
@@ -340,7 +339,7 @@ class _PackagePageState extends State<PackagePage> {
                 const SizedBox(height: 24),
 
                 // Book Button
-                _buildBookButton(package, context, rekening),
+                _buildBookButton(package, context),
               ],
             ),
           ),
@@ -514,7 +513,7 @@ class _PackagePageState extends State<PackagePage> {
   }
 
   Widget _buildBookButton(
-      Datum package, BuildContext context, String rekening) {
+      Datum package, BuildContext context) {
     return BlocConsumer<OrderProductBloc, OrderProductState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -527,7 +526,7 @@ class _PackagePageState extends State<PackagePage> {
               }
 
               if (dataOrder.success == true) {
-                showSuccessDialog(context, rekening);
+                showSuccessDialog(context, package.noRekening);
               }
             }
           },
@@ -633,29 +632,30 @@ void showSuccessDialog(BuildContext context, String rekening) {
             ),
             const SizedBox(height: 16),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey.shade300),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     rekening,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(width: 8),
                   IconButton(
                     icon: const Icon(Icons.copy, size: 20),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: rekening));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Nomor rekening disalin'),
                           duration: Duration(seconds: 2),
                         ),

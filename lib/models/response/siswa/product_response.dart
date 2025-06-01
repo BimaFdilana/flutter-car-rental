@@ -30,6 +30,7 @@ class Datum {
   final int id;
   final String namaPaket;
   final String jumlahJam;
+  final String noRekening;
   final String deskripsi;
   final String harga;
   final DateTime createdAt;
@@ -39,6 +40,7 @@ class Datum {
     required this.id,
     required this.namaPaket,
     required this.jumlahJam,
+    required this.noRekening,
     required this.deskripsi,
     required this.harga,
     required this.createdAt,
@@ -53,6 +55,7 @@ class Datum {
         id: json["id"],
         namaPaket: json["nama_paket"],
         jumlahJam: json["jumlah_jam"],
+        noRekening: json["no_rekening"],
         deskripsi: json["deskripsi"],
         harga: json["harga"],
         createdAt: DateTime.parse(json["created_at"]),
@@ -63,6 +66,7 @@ class Datum {
         "id": id,
         "nama_paket": namaPaket,
         "jumlah_jam": jumlahJam,
+        "no_rekening": noRekening,
         "deskripsi": deskripsi,
         "harga": harga,
         "created_at": createdAt.toIso8601String(),
