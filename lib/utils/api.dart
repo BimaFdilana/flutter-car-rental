@@ -36,4 +36,11 @@ class ApiEndpoint {
   static const String updatePesanan =
       '${BaseUrl.baseUrl}${Api.api}/pesanan/{id}';
   static const String allJadwal = '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa';
+
+  static const String allPaket = '${BaseUrl.baseUrl}${Api.api}/paket';
+  static const String detailPaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
+  static const String createPaket = '${BaseUrl.baseUrl}${Api.api}/paket';
+  static const String editPaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
+  static const String deletePaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
+
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/cart_page.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/package_page.dart';
-import 'package:kursus_mengemudi_nasional/screens/profile_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/siswa/profile_page.dart';
 import 'package:kursus_mengemudi_nasional/utils/theme.dart';
 
 class MainNavigation extends StatefulWidget {

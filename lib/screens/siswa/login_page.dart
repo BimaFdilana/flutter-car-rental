@@ -6,7 +6,7 @@ import 'package:kursus_mengemudi_nasional/models/request/login_request.dart';
 import 'package:kursus_mengemudi_nasional/screens/instruktur/instruktur.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/dashboard_kasir.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/main_nav.dart';
-import 'package:kursus_mengemudi_nasional/screens/register_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/siswa/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

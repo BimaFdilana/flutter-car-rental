@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
-import 'package:kursus_mengemudi_nasional/screens/instruktur/instruktur.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/paket/all_paket.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/pesanan/all_pesanan.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/change_status_kursus.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/show_all_jadwal.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/show_all_user.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/tambah_user.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/user.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
 
 class DashboardKasir extends StatelessWidget {
@@ -146,7 +141,7 @@ class DashboardKasir extends StatelessWidget {
                         () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ShowAllJadwal())),
+                                builder: (context) => AllPesanan())),
                       ),
                       _buildMenuCard(
                         context,
@@ -156,7 +151,7 @@ class DashboardKasir extends StatelessWidget {
                         () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChangeStatusKursus())),
+                                builder: (context) => AllPesanan())),
                       ),
                       _buildMenuCard(
                         context,

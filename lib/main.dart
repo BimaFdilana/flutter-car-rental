@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_jadwal/all_jadwal_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/all_paket/all_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_pesanan/all_pesanan_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/deleted_paket/deleted_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/local_user/local_user_bloc.dart';
 
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_product/order_product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/paket_detail/paket_detail_dart_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/pesanan_detail/pesanan_detail_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
@@ -21,6 +24,7 @@ import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/auth/auth_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/instruktur/instruktur_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_jadwal_remote.dart';
+import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_paket_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_pesanan_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/order_product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/product_remote.dart';
@@ -118,6 +122,21 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => UpdatePesananStatusBloc(
             allPesananRemote: AllPesananRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AllPaketBloc(
+            remoteDatasource: AllPaketRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => PaketDetailDartBloc(
+            remoteDatasource: AllPaketRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => DeletedPaketBloc(
+            allPaketRemoteDatasource: AllPaketRemoteDatasource(),
           ),
         ),
       ],
