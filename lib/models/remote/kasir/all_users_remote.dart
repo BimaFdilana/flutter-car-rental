@@ -15,7 +15,7 @@ class AllUsersRemoteDatasource {
       'Content-Type': 'application/json',
     };
     final response = await http.get(
-      Uri.parse(ApiEndpoint.addJadwal),
+      Uri.parse(ApiEndpoint.allUsers),
       headers: headers,
     );
     if (response.statusCode == 200) {

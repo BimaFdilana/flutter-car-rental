@@ -6,7 +6,7 @@ import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/paket/all_paket.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/pesanan/all_pesanan.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/show_all_user.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/userAccount/show_all_user.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
 
 class DashboardKasir extends StatelessWidget {

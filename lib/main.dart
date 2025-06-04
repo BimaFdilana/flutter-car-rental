@@ -7,9 +7,10 @@ import 'package:kursus_mengemudi_nasional/logic/add_paket/add_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_jadwal/all_jadwal_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_paket/all_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_pesanan/all_pesanan_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/all_user/all_user_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/deleted_paket/deleted_paket_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/deleted_user/deleted_user_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/local_user/local_user_bloc.dart';
-
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_product/order_product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
@@ -27,6 +28,7 @@ import 'package:kursus_mengemudi_nasional/models/remote/instruktur/instruktur_re
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_jadwal_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_paket_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_pesanan_remote.dart';
+import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_users_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/order_product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/response/login_response.dart';
@@ -143,6 +145,16 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AddPaketBloc(
             paketRemoteDatasource: AllPaketRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AllUserBloc(
+            allUsersRemoteDatasource: AllUsersRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => DeletedUserBloc(
+            allUsersRemoteDatasource: AllUsersRemoteDatasource(),
           ),
         ),
       ],

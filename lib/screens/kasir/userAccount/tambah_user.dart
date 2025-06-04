@@ -12,10 +12,9 @@ class _TambahUserState extends State<TambahUser> {
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
   final _teleponController = TextEditingController();
-  final _alamatController = TextEditingController();
 
   String _selectedRole = 'Student';
-  final List<String> _roles = ['Student', 'Instructor', 'Admin'];
+  final List<String> _roles = ['Student', 'Instructor'];
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class _TambahUserState extends State<TambahUser> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: Offset(0, 4),
                   ),
@@ -59,7 +58,7 @@ class _TambahUserState extends State<TambahUser> {
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Color(0xFF1976D2).withOpacity(0.1),
+                      color: Color(0xFF1976D2).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
@@ -105,7 +104,7 @@ class _TambahUserState extends State<TambahUser> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Colors.blue.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: Offset(0, 4),
                     ),
@@ -136,7 +135,7 @@ class _TambahUserState extends State<TambahUser> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                  color: Color(0xFF1976D2).withOpacity(0.3)),
+                                  color: Color(0xFF1976D2).withValues(alpha: 0.3)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -153,47 +152,7 @@ class _TambahUserState extends State<TambahUser> {
                         ),
                         SizedBox(height: 20),
 
-                        // Email
-                        Text(
-                          'Email',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF1976D2),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: 'Masukkan email',
-                            prefixIcon:
-                                Icon(Icons.email, color: Color(0xFF1976D2)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF1976D2).withOpacity(0.3)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF1976D2), width: 2),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Email harus diisi';
-                            }
-                            if (!value.contains('@')) {
-                              return 'Format email tidak valid';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 20),
-
-                        // Telepon
+                         // Telepon
                         Text(
                           'Nomor Telepon',
                           style: TextStyle(
@@ -213,7 +172,7 @@ class _TambahUserState extends State<TambahUser> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                  color: Color(0xFF1976D2).withOpacity(0.3)),
+                                  color: Color(0xFF1976D2).withValues(alpha: 0.3)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -224,6 +183,43 @@ class _TambahUserState extends State<TambahUser> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Nomor telepon harus diisi';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 20),
+
+                        // Email
+                        Text(
+                          'Password',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1976D2),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.visiblePassword,
+                          decoration: InputDecoration(
+                            hintText: 'Masukkan password',
+                            prefixIcon:
+                                Icon(Icons.lock, color: Color(0xFF1976D2)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: Color(0xFF1976D2).withValues(alpha: 0.3)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: Color(0xFF1976D2), width: 2),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password harus diisi';
                             }
                             return null;
                           },
@@ -245,7 +241,7 @@ class _TambahUserState extends State<TambahUser> {
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color(0xFF1976D2).withOpacity(0.3)),
+                                color: Color(0xFF1976D2).withValues(alpha: 0.3)),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: DropdownButton<String>(
@@ -273,43 +269,6 @@ class _TambahUserState extends State<TambahUser> {
                               });
                             },
                           ),
-                        ),
-                        SizedBox(height: 20),
-
-                        // Alamat
-                        Text(
-                          'Alamat',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF1976D2),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        TextFormField(
-                          controller: _alamatController,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            hintText: 'Masukkan alamat lengkap',
-                            prefixIcon: Icon(Icons.location_on,
-                                color: Color(0xFF1976D2)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF1976D2).withOpacity(0.3)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF1976D2), width: 2),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Alamat harus diisi';
-                            }
-                            return null;
-                          },
                         ),
                         SizedBox(height: 30),
 
@@ -350,12 +309,10 @@ class _TambahUserState extends State<TambahUser> {
 
   IconData _getRoleIcon(String role) {
     switch (role) {
-      case 'Student':
+      case 'siswa':
         return Icons.school;
-      case 'Instructor':
+      case 'instruktur':
         return Icons.person;
-      case 'Admin':
-        return Icons.admin_panel_settings;
       default:
         return Icons.person;
     }
@@ -399,7 +356,6 @@ class _TambahUserState extends State<TambahUser> {
     _namaController.clear();
     _emailController.clear();
     _teleponController.clear();
-    _alamatController.clear();
     setState(() {
       _selectedRole = 'Student';
     });
@@ -410,7 +366,6 @@ class _TambahUserState extends State<TambahUser> {
     _namaController.dispose();
     _emailController.dispose();
     _teleponController.dispose();
-    _alamatController.dispose();
     super.dispose();
   }
 }
