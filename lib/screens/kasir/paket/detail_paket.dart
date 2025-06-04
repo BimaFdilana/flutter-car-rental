@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kursus_mengemudi_nasional/logic/deleted_paket/deleted_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/paket_detail/paket_detail_dart_bloc.dart';
 
 class DetailPaketScreen extends StatefulWidget {
@@ -21,6 +20,14 @@ class _DetailPaketScreenState extends State<DetailPaketScreen> {
   String formatDate(String dateStr) {
     DateTime date = DateTime.parse(dateStr);
     return '${date.day}/${date.month}/${date.year}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<PaketDetailDartBloc>()
+        .add(PaketDetailDartEvent.started(widget.pesananId));
   }
 
   @override

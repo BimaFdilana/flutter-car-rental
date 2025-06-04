@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/add_paket/add_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_jadwal/all_jadwal_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_paket/all_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_pesanan/all_pesanan_bloc.dart';
@@ -137,6 +138,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => DeletedPaketBloc(
             allPaketRemoteDatasource: AllPaketRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AddPaketBloc(
+            paketRemoteDatasource: AllPaketRemoteDatasource(),
           ),
         ),
       ],

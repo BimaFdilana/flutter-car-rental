@@ -43,4 +43,8 @@ class ApiEndpoint {
   static const String editPaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
   static const String deletePaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
 
+  static const String allUsers = '${BaseUrl.baseUrl}${Api.api}/user';
+  static const String addUser = '${BaseUrl.baseUrl}${Api.api}/user';
+  static const String deleteUser = '${BaseUrl.baseUrl}${Api.api}/user/{id}';
+
 }
