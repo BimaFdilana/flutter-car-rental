@@ -380,20 +380,13 @@ class ModernUserStatusCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: primaryBlue.withValues(alpha: 0.08),
-            blurRadius: 25,
-            offset: const Offset(0, 12),
-          ),
-        ],
       ),
       child: Column(
         children: [
           // Header dengan gradient
           Container(
             padding: const EdgeInsets.all(24),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -610,16 +603,9 @@ class ModernUserStatusCard extends StatelessWidget {
                             Container(
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [primaryBlue, darkBlue],
+                                  colors: [Colors.cyan, Colors.green],
                                 ),
                                 borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: primaryBlue.withOpacity(0.3),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
                               ),
                               child: ElevatedButton.icon(
                                 onPressed: () {
@@ -649,10 +635,9 @@ class ModernUserStatusCard extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                icon:
-                                    const Icon(Icons.update_rounded, size: 16),
+                                icon: const Icon(Icons.check_circle, size: 16),
                                 label: const Text(
-                                  "Update Status",
+                                  "Selesai",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,

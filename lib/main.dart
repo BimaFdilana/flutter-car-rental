@@ -10,8 +10,10 @@ import 'package:kursus_mengemudi_nasional/logic/local_user/local_user_bloc.dart'
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_product/order_product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/order_data/order_data_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/pesanan_detail/pesanan_detail_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/update_pesanan_status/update_pesanan_status_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/update_status_instruktur/update_status_instruktut_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/upload_image/upload_image_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/user_status/user_status_bloc.dart';
@@ -106,6 +108,16 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AllJadwalBloc(
             remoteAllproduct: AllJadwalRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => PesananDetailBloc(
+            allPesananRemote: AllPesananRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => UpdatePesananStatusBloc(
+            allPesananRemote: AllPesananRemoteDatasource(),
           ),
         ),
       ],

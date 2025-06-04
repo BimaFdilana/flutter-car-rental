@@ -1,5 +1,5 @@
 class BaseUrl {
-  static const String baseUrl = 'http://192.168.1.39:8000';
+  static const String baseUrl = 'http://192.168.1.89:8000';
   static const String storage = '$baseUrl/storage/';
 }
 
@@ -31,5 +31,9 @@ class ApiEndpoint {
 
   // Kasir
   static const String allPesanan = '${BaseUrl.baseUrl}${Api.api}/pesanan';
+  static const String detailPesanan =
+      '${BaseUrl.baseUrl}${Api.api}/pesanan/{id}';
+  static const String updatePesanan =
+      '${BaseUrl.baseUrl}${Api.api}/pesanan/{id}';
   static const String allJadwal = '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa';
 }
