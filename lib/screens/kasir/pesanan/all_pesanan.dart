@@ -37,8 +37,8 @@ class _AllPesananState extends State<AllPesanan> {
       setState(() {
         filteredPesanan = allPesanan.where((pesanan) {
           // Contoh filter berdasarkan namaUser dan namaPaket
-          final namaUser = pesanan.namaUser.toLowerCase();
-          final namaPaket = pesanan.namaPaket.toLowerCase();
+          final namaUser = pesanan.namaUser!.toLowerCase();
+          final namaPaket = pesanan.namaPaket!.toLowerCase();
           return namaUser.contains(query) || namaPaket.contains(query);
         }).toList();
       });
@@ -111,6 +111,7 @@ class _AllPesananState extends State<AllPesanan> {
             );
           },
           error: (message) {
+            debugPrint(message);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(message),
@@ -164,14 +165,17 @@ class _AllPesananState extends State<AllPesanan> {
 
                           final total = all.length;
                           final totalPending = all
-                              .where((e) => e.status.toLowerCase() == 'pending')
+                              .where(
+                                  (e) => e.status?.toLowerCase() == 'pending')
                               .length;
                           final totalProcessing = all
                               .where(
-                                  (e) => e.status.toLowerCase() == 'processing')
+                                  (e) =>
+                                  e.status?.toLowerCase() == 'processing')
                               .length;
                           final totalSuccess = all
-                              .where((e) => e.status.toLowerCase() == 'success')
+                              .where(
+                                  (e) => e.status?.toLowerCase() == 'success')
                               .length;
 
                           return Row(
@@ -223,11 +227,12 @@ class _AllPesananState extends State<AllPesanan> {
                         final filtered = query.isEmpty
                             ? allPesanan
                             : allPesanan.where((pesanan) {
-                                final namaUser = pesanan.namaUser.toLowerCase();
+                                final namaUser =
+                                    pesanan.namaUser?.toLowerCase();
                                 final namaPaket =
-                                    pesanan.namaPaket.toLowerCase();
-                                return namaUser.contains(query) ||
-                                    namaPaket.contains(query);
+                                    pesanan.namaPaket?.toLowerCase();
+                                return namaUser!.contains(query) ||
+                                    namaPaket!.contains(query);
                               }).toList();
 
                         return filtered.isEmpty
@@ -365,7 +370,7 @@ class _AllPesananState extends State<AllPesanan> {
                                                       ),
                                                       decoration: BoxDecoration(
                                                         color: getStatusColor(
-                                                            pesanan.status),
+                                                            pesanan.status!),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(25),
@@ -373,7 +378,7 @@ class _AllPesananState extends State<AllPesanan> {
                                                           BoxShadow(
                                                             color: getStatusColor(
                                                                     pesanan
-                                                                        .status)
+                                                                        .status!)
                                                                 .withOpacity(
                                                                     0.3),
                                                             blurRadius: 8,
@@ -383,7 +388,7 @@ class _AllPesananState extends State<AllPesanan> {
                                                         ],
                                                       ),
                                                       child: Text(
-                                                        pesanan.status
+                                                        pesanan.status!
                                                             .toUpperCase(),
                                                         style: TextStyle(
                                                           color: Colors.white,
@@ -418,7 +423,8 @@ class _AllPesananState extends State<AllPesanan> {
                                                         icon: Icons
                                                             .person_rounded,
                                                         label: 'Customer',
-                                                        value: pesanan.namaUser,
+                                                        value:
+                                                            pesanan.namaUser!,
                                                         iconColor:
                                                             Colors.purple,
                                                       ),
@@ -428,7 +434,7 @@ class _AllPesananState extends State<AllPesanan> {
                                                             .local_offer_rounded,
                                                         label: 'Paket',
                                                         value:
-                                                            pesanan.namaPaket,
+                                                            pesanan.namaPaket!,
                                                         iconColor:
                                                             Colors.orange,
                                                       ),
@@ -437,7 +443,7 @@ class _AllPesananState extends State<AllPesanan> {
                                                         icon: Icons
                                                             .directions_car_rounded,
                                                         label: 'Mobil',
-                                                        value: pesanan.mobil,
+                                                        value: pesanan.mobil!,
                                                         iconColor: Colors.green,
                                                       ),
                                                     ],
@@ -635,7 +641,7 @@ class _AllPesananState extends State<AllPesanan> {
                                                           onPressed: () =>
                                                               editStatus(
                                                             pesanan.pesananId,
-                                                            pesanan.status,
+                                                            pesanan.status!,
                                                           ),
                                                           icon: Icon(
                                                             Icons.edit_rounded,

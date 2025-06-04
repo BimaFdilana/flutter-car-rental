@@ -42,7 +42,7 @@ class AllUsersRemoteDatasource {
       headers: headers,
       body: request.toJson(),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       try {
         final decodedJson = jsonDecode(response.body);
         final model = AddUserResponse.fromMap(decodedJson);

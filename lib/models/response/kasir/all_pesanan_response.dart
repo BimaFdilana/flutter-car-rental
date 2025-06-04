@@ -25,33 +25,33 @@ class AllPesananKasirResponse {
 }
 
 class Datum {
-    final int pesananId;
-    final String namaUser;
-    final String namaPaket;
-    final String status;
-    final int jumlahJamPaket;
-    final String mobil;
-    final int jamTerpakai;
-    final int jamSisa;
-    final String buktiPembayaran;
+  final int pesananId;
+  final String? namaUser;
+  final String? namaPaket;
+  final String? status;
+  final int jumlahJamPaket;
+  final String? mobil;
+  final int jamTerpakai;
+  final int jamSisa;
+  final String? buktiPembayaran;
 
-    Datum({
-        required this.pesananId,
-        required this.namaUser,
-        required this.namaPaket,
-        required this.status,
-        required this.jumlahJamPaket,
-        required this.mobil,
-        required this.jamTerpakai,
-        required this.jamSisa,
-        required this.buktiPembayaran,
-    });
+  Datum({
+    required this.pesananId,
+    this.namaUser,
+    this.namaPaket,
+    this.status,
+    required this.jumlahJamPaket,
+    this.mobil,
+    required this.jamTerpakai,
+    required this.jamSisa,
+    this.buktiPembayaran,
+  });
 
-    factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
+  factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMap());
 
-    factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
         pesananId: json["pesanan_id"],
         namaUser: json["nama_user"],
         namaPaket: json["nama_paket"],
@@ -61,9 +61,9 @@ class Datum {
         jamTerpakai: json["jam_terpakai"],
         jamSisa: json["jam_sisa"],
         buktiPembayaran: json["bukti_pembayaran"],
-    );
+      );
 
-    Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => {
         "pesanan_id": pesananId,
         "nama_user": namaUser,
         "nama_paket": namaPaket,
@@ -73,5 +73,6 @@ class Datum {
         "jam_terpakai": jamTerpakai,
         "jam_sisa": jamSisa,
         "bukti_pembayaran": buktiPembayaran,
-    };
+      };
 }
+
