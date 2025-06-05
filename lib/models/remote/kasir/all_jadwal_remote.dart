@@ -14,7 +14,7 @@ class AllJadwalRemoteDatasource {
       'Content-Type': 'application/json',
     };
     final response = await http.get(
-      Uri.parse(ApiEndpoint.allJadwal),
+      Uri.parse(ApiEndpoint.allJadwalKasir),
       headers: headers,
     );
     if (response.statusCode == 200) {

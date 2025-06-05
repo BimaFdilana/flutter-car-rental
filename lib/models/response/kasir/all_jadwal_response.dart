@@ -63,9 +63,8 @@ class Datum {
         id: json["id"] ?? 0,
         pesananId: json["pesanan_id"] ?? 0,
         instrukturId: json["instruktur_id"],
-        tanggal: json["tanggal"] != null
-            ? DateTime.tryParse(json["tanggal"])
-            : null,
+        tanggal:
+            json["tanggal"] != null ? DateTime.tryParse(json["tanggal"]) : null,
         waktuMulai: json["waktu_mulai"],
         waktuSelesai: json["waktu_selesai"],
         status: json["status"],
@@ -201,5 +200,84 @@ class Pesanan {
         "status": status,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class ChangeJadwalKasirResponse {
+  final bool success;
+  final Data data;
+
+  ChangeJadwalKasirResponse({
+    required this.success,
+    required this.data,
+  });
+
+  factory ChangeJadwalKasirResponse.fromJson(String str) =>
+      ChangeJadwalKasirResponse.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory ChangeJadwalKasirResponse.fromMap(Map<String, dynamic> json) =>
+      ChangeJadwalKasirResponse(
+        success: json["success"],
+        data: Data.fromMap(json["data"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "success": success,
+        "data": data.toMap(),
+      };
+}
+
+class Data {
+  final int id;
+  final int pesananId;
+  final int instrukturId;
+  final DateTime tanggal;
+  final String waktuMulai;
+  final String waktuSelesai;
+  final String status;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  Data({
+    required this.id,
+    required this.pesananId,
+    required this.instrukturId,
+    required this.tanggal,
+    required this.waktuMulai,
+    required this.waktuSelesai,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Data.fromMap(Map<String, dynamic> json) => Data(
+        id: json["id"],
+        pesananId: json["pesanan_id"],
+        instrukturId: json["instruktur_id"],
+        tanggal: DateTime.parse(json["tanggal"]),
+        waktuMulai: json["waktu_mulai"],
+        waktuSelesai: json["waktu_selesai"],
+        status: json["status"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "pesanan_id": pesananId,
+        "instruktur_id": instrukturId,
+        "tanggal":
+            "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
+        "waktu_mulai": waktuMulai,
+        "waktu_selesai": waktuSelesai,
+        "status": status,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
       };
 }
