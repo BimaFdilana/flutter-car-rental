@@ -5,8 +5,9 @@ import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/request/login_request.dart';
 import 'package:kursus_mengemudi_nasional/screens/instruktur/instruktur.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/dashboard_kasir.dart';
+import 'package:kursus_mengemudi_nasional/screens/pemilik/pemilik.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/main_nav.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/register_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -255,8 +256,12 @@ class _LoginPageState extends State<LoginPage> {
                                       } else if (value.data.user.role ==
                                               'Owner' ||
                                           value.data.user.role == 'owner') {
-                                        // comment
-                                        const Text('akun owner');
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const PemilikListScreen()),
+                                        );
                                       } else if (value.data.user.role ==
                                               'Instruktur' ||
                                           value.data.user.role ==
@@ -267,8 +272,6 @@ class _LoginPageState extends State<LoginPage> {
                                               builder: (context) =>
                                                   const JadwalPage()),
                                         );
-                                        // comment
-                                        const Text('akun instruktur');
                                       } else if (value.data.user.role ==
                                               'Kasir' ||
                                           value.data.user.role == 'kasir') {

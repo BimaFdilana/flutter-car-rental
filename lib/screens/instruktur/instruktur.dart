@@ -6,7 +6,7 @@ import 'package:kursus_mengemudi_nasional/logic/user_status/user_status_bloc.dar
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/request/instruktur/update_status_request.dart';
 import 'package:kursus_mengemudi_nasional/models/response/instruktur/user_status.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/auth/login_page.dart';
 
 class JadwalPage extends StatefulWidget {
   const JadwalPage({super.key});

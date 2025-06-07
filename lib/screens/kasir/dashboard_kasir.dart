@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/jadwal/jadwal.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/paket/all_paket.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/pesanan/all_pesanan.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/userAccount/show_all_user.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/auth/login_page.dart';
 
 class DashboardKasir extends StatelessWidget {
   const DashboardKasir({super.key});
@@ -142,7 +143,7 @@ class DashboardKasir extends StatelessWidget {
                         () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AllPesanan())),
+                                builder: (context) => JadwalListPage())),
                       ),
                       _buildMenuCard(
                         context,

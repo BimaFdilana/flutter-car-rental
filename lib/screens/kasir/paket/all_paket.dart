@@ -62,8 +62,8 @@ class AllPaketScreenState extends State<AllPaketScreen> {
           title: Text('Semua Paket',
               style: TextStyle(fontWeight: FontWeight.bold)),
           centerTitle: true,
-          elevation: 2,
-          shadowColor: Colors.blue.withOpacity(0.3),
+          backgroundColor: Color(0xFF1976D2),
+          elevation: 0,
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -71,9 +71,10 @@ class AllPaketScreenState extends State<AllPaketScreen> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFFE3F2FD),
+                Color(0xFF1976D2),
                 Color(0xFFF5F7FA),
               ],
+              stops: [0.0, 0.3],
             ),
           ),
           child: BlocBuilder<AllPaketBloc, AllPaketState>(
@@ -293,7 +294,6 @@ class AllPaketScreenState extends State<AllPaketScreen> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => CreatePaketScreen()),

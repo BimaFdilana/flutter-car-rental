@@ -1,5 +1,7 @@
 class BaseUrl {
-  static const String baseUrl = 'http://192.168.64.104:8000';
+  static const String baseUrl =
+      'https://1be-mobile.virtualtouralamayangpku.my.id';
+
   static const String storage = '$baseUrl/storage/';
 }
 
@@ -51,8 +53,6 @@ class ApiEndpoint {
   // kasir jadwal
   static const String allJadwalKasir =
       '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa';
-  static const String detailJadwalKasir =
-      '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa/{id}';
   static const String changeStatusJadwalKasir =
       '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa/{id}/status';
 

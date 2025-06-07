@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:kursus_mengemudi_nasional/logic/add_jadwal/add_jadwal_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/add_paket/add_paket_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/add_user/add_user_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_jadwal/all_jadwal_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_paket/all_paket_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/all_pemilik/all_pemilik_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_pesanan/all_pesanan_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/all_user/all_user_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/deleted_paket/deleted_paket_bloc.dart';
@@ -21,6 +24,7 @@ import 'package:kursus_mengemudi_nasional/logic/product/product_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/register/register_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/update_pesanan_status/update_pesanan_status_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/update_status_instruktur/update_status_instruktut_bloc.dart';
+import 'package:kursus_mengemudi_nasional/logic/update_status_kasir/update_status_kasir_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/upload_image/upload_image_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/user_status/user_status_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
@@ -30,19 +34,22 @@ import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_jadwal_remote.
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_paket_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_pesanan_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/kasir/all_users_remote.dart';
+import 'package:kursus_mengemudi_nasional/models/remote/pemilik/pemilik_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/order_product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/remote/siswa/product_remote.dart';
 import 'package:kursus_mengemudi_nasional/models/response/login_response.dart';
 import 'package:kursus_mengemudi_nasional/screens/instruktur/instruktur.dart';
 import 'package:kursus_mengemudi_nasional/screens/kasir/dashboard_kasir.dart';
+import 'package:kursus_mengemudi_nasional/screens/pemilik/pemilik.dart';
 import 'package:kursus_mengemudi_nasional/screens/siswa/main_nav.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/auth/login_page.dart';
 
 import 'logic/login/login_bloc.dart';
 import 'utils/theme.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
   runApp(const MyApp());
 }
 
@@ -163,6 +170,16 @@ class MyApp extends StatelessWidget {
             allUsersRemoteDatasource: AllUsersRemoteDatasource(),
           ),
         ),
+        BlocProvider(
+          create: (context) => AllPemilikBloc(
+            pemilikRemoteDatasource: PemilikRemoteDatasource(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => UpdateStatusKasirBloc(
+            allJadwalRemoteDatasource: AllJadwalRemoteDatasource(),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'NASIONAL Kursus Mengemudi',
@@ -181,6 +198,8 @@ class MyApp extends StatelessWidget {
                   return const JadwalPage();
                 } else if (role == 'Kasir' || role == 'kasir') {
                   return const DashboardKasir();
+                } else if (role == 'Owner' || role == 'owner') {
+                  return const PemilikListScreen();
                 } else {
                   return const LoginPage();
                 }
