@@ -56,10 +56,10 @@ class Datum {
         namaUser: json["nama_user"],
         namaPaket: json["nama_paket"],
         status: json["status"],
-        jumlahJamPaket: json["jumlah_jam_paket"],
+        jumlahJamPaket: json["jumlah_jam_paket"] ?? 0,
         mobil: json["mobil"],
-        jamTerpakai: json["jam_terpakai"],
-        jamSisa: json["jam_sisa"],
+        jamTerpakai: json["jam_terpakai"] ?? 0,
+        jamSisa: json["jam_sisa"] ?? 0,
         buktiPembayaran: json["bukti_pembayaran"],
       );
 

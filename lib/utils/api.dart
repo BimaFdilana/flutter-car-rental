@@ -1,6 +1,7 @@
 class BaseUrl {
-  static const String baseUrl =
-      'https://1be-mobile.virtualtouralamayangpku.my.id';
+  // static const String baseUrl =
+  // 'https://1be-mobile.virtualtouralamayangpku.my.id';
+  static const String baseUrl = 'http://192.168.255.104:8000';
 
   static const String storage = '$baseUrl/storage/';
 }

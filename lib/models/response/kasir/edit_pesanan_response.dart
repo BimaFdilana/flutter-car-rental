@@ -34,8 +34,8 @@ class Pesanan {
   final int id;
   final int userId;
   final int paketId;
-  final String mobil;
-  final String buktiPembayaran;
+  final String? mobil;
+  final String? buktiPembayaran;
   final String status;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -44,7 +44,7 @@ class Pesanan {
     required this.id,
     required this.userId,
     required this.paketId,
-    required this.mobil,
+    this.mobil,
     required this.buktiPembayaran,
     required this.status,
     required this.createdAt,
