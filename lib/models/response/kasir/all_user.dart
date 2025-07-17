@@ -53,17 +53,21 @@ class Datum {
   String toJson() => json.encode(toMap());
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        name: json["name"],
-        username: json["username"],
-        noHp: json["no_hp"],
-        email: json["email"],
-        emailVerifiedAt: json["email_verified_at"] == null
-            ? null
-            : DateTime.parse(json["email_verified_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        roles: List<Role>.from(json["roles"].map((x) => Role.fromMap(x))),
+        id: int.tryParse(json["id"].toString()) ?? 0,
+        name: json["name"]?.toString() ?? '',
+        username: json["username"]?.toString() ?? '',
+        noHp: json["no_hp"]?.toString() ?? '',
+        email: json["email"]?.toString(),
+        emailVerifiedAt: json["email_verified_at"] != null
+            ? DateTime.tryParse(json["email_verified_at"].toString())
+            : null,
+        createdAt:
+            DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now(),
+        updatedAt:
+            DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now(),
+        roles: (json["roles"] as List<dynamic>? ?? [])
+            .map((x) => Role.fromMap(x))
+            .toList(),
       );
 
   Map<String, dynamic> toMap() => {
@@ -101,12 +105,14 @@ class Role {
   String toJson() => json.encode(toMap());
 
   factory Role.fromMap(Map<String, dynamic> json) => Role(
-        id: json["id"],
-        name: json["name"],
-        guardName: json["guard_name"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        pivot: Pivot.fromMap(json["pivot"]),
+        id: int.tryParse(json["id"].toString()) ?? 0,
+        name: json["name"]?.toString() ?? '',
+        guardName: json["guard_name"]?.toString() ?? '',
+        createdAt:
+            DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now(),
+        updatedAt:
+            DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now(),
+        pivot: Pivot.fromMap(json["pivot"] ?? {}),
       );
 
   Map<String, dynamic> toMap() => {
@@ -135,9 +141,9 @@ class Pivot {
   String toJson() => json.encode(toMap());
 
   factory Pivot.fromMap(Map<String, dynamic> json) => Pivot(
-        modelType: json["model_type"],
-        modelId: json["model_id"],
-        roleId: json["role_id"],
+        modelType: json["model_type"]?.toString() ?? '',
+        modelId: int.tryParse(json["model_id"].toString()) ?? 0,
+        roleId: int.tryParse(json["role_id"].toString()) ?? 0,
       );
 
   Map<String, dynamic> toMap() => {
@@ -147,99 +153,99 @@ class Pivot {
       };
 }
 
-
-
-
 class AddUserResponse {
-    final bool success;
-    final String message;
-    final User user;
+  final bool success;
+  final String message;
+  final User user;
 
-    AddUserResponse({
-        required this.success,
-        required this.message,
-        required this.user,
-    });
+  AddUserResponse({
+    required this.success,
+    required this.message,
+    required this.user,
+  });
 
-    factory AddUserResponse.fromJson(String str) => AddUserResponse.fromMap(json.decode(str));
+  factory AddUserResponse.fromJson(String str) =>
+      AddUserResponse.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMap());
 
-    factory AddUserResponse.fromMap(Map<String, dynamic> json) => AddUserResponse(
+  factory AddUserResponse.fromMap(Map<String, dynamic> json) => AddUserResponse(
         success: json["success"],
         message: json["message"],
         user: User.fromMap(json["user"]),
-    );
+      );
 
-    Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => {
         "success": success,
         "message": message,
         "user": user.toMap(),
-    };
+      };
 }
 
 class User {
-    final String username;
-    final String noHp;
-    final String name;
-    final DateTime updatedAt;
-    final DateTime createdAt;
-    final int id;
+  final String username;
+  final String noHp;
+  final String name;
+  final DateTime updatedAt;
+  final DateTime createdAt;
+  final int id;
 
-    User({
-        required this.username,
-        required this.noHp,
-        required this.name,
-        required this.updatedAt,
-        required this.createdAt,
-        required this.id,
-    });
+  User({
+    required this.username,
+    required this.noHp,
+    required this.name,
+    required this.updatedAt,
+    required this.createdAt,
+    required this.id,
+  });
 
-    factory User.fromJson(String str) => User.fromMap(json.decode(str));
+  factory User.fromJson(String str) => User.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMap());
 
-    factory User.fromMap(Map<String, dynamic> json) => User(
-        username: json["username"],
-        noHp: json["no_hp"],
-        name: json["name"],
-        updatedAt: DateTime.parse(json["updated_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        id: json["id"],
-    );
+  factory User.fromMap(Map<String, dynamic> json) => User(
+        username: json["username"]?.toString() ?? '',
+        noHp: json["no_hp"]?.toString() ?? '',
+        name: json["name"]?.toString() ?? '',
+        updatedAt:
+            DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now(),
+        createdAt:
+            DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now(),
+        id: int.tryParse(json["id"].toString()) ?? 0,
+      );
 
-    Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => {
         "username": username,
         "no_hp": noHp,
         "name": name,
         "updated_at": updatedAt.toIso8601String(),
         "created_at": createdAt.toIso8601String(),
         "id": id,
-    };
+      };
 }
 
-
-
 class DeletedUserResponse {
-    final bool success;
-    final String message;
+  final bool success;
+  final String message;
 
-    DeletedUserResponse({
-        required this.success,
-        required this.message,
-    });
+  DeletedUserResponse({
+    required this.success,
+    required this.message,
+  });
 
-    factory DeletedUserResponse.fromJson(String str) => DeletedUserResponse.fromMap(json.decode(str));
+  factory DeletedUserResponse.fromJson(String str) =>
+      DeletedUserResponse.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMap());
 
-    factory DeletedUserResponse.fromMap(Map<String, dynamic> json) => DeletedUserResponse(
+  factory DeletedUserResponse.fromMap(Map<String, dynamic> json) =>
+      DeletedUserResponse(
         success: json["success"],
         message: json["message"],
-    );
+      );
 
-    Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => {
         "success": success,
         "message": message,
-    };
+      };
 }

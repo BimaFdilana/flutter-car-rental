@@ -24,6 +24,7 @@ class _UserListScreenState extends State<UserListScreen>
   @override
   void initState() {
     super.initState();
+    context.read<AllUserBloc>().add(AllUserEvent.started());
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -420,34 +421,6 @@ class _UserListScreenState extends State<UserListScreen>
                         end: Alignment.bottomRight,
                       ),
                     ),
-                    // child: Stack(
-                    //   children: [
-                    //     Positioned(
-                    //       right: -20,
-                    //       top: -20,
-                    //       child: Container(
-                    //         width: 150,
-                    //         height: 150,
-                    //         decoration: BoxDecoration(
-                    //           color: Colors.white.withOpacity(0.1),
-                    //           shape: BoxShape.circle,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     Positioned(
-                    //       left: -30,
-                    //       bottom: -30,
-                    //       child: Container(
-                    //         width: 100,
-                    //         height: 100,
-                    //         decoration: BoxDecoration(
-                    //           color: Colors.white.withOpacity(0.05),
-                    //           shape: BoxShape.circle,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ),
                 ),
               ),

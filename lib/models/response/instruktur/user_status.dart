@@ -9,8 +9,10 @@ class UserStatusResponseModel {
 
   factory UserStatusResponseModel.fromMap(Map<String, dynamic> map) {
     return UserStatusResponseModel(
-      success: map['success'] as bool,
-      data: List<Data>.from(map['data'].map((x) => Data.fromMap(x))),
+      success: map['success'] == true,
+      data: map['data'] is List
+          ? List<Data>.from((map['data'] as List).map((x) => Data.fromMap(x)))
+          : [],
     );
   }
 }
@@ -40,16 +42,18 @@ class Data {
 
   factory Data.fromMap(Map<String, dynamic> map) {
     return Data(
-      id: map['id'] as int,
-      name: map['name'] as String,
-      username: map['username'] as String,
-      noHp: map['no_hp'] as String,
-      email: map['email'],
-      emailVerifiedAt: map['email_verified_at'],
-      createdAt: map['created_at'] as String,
-      updatedAt: map['updated_at'] as String,
-      pesanan:
-          List<Pesanan>.from(map['pesanan'].map((x) => Pesanan.fromMap(x))),
+      id: int.tryParse(map['id'].toString()) ?? 0,
+      name: map['name']?.toString() ?? '',
+      username: map['username']?.toString() ?? '',
+      noHp: map['no_hp']?.toString() ?? '',
+      email: map['email']?.toString(),
+      emailVerifiedAt: map['email_verified_at']?.toString(),
+      createdAt: map['created_at']?.toString() ?? '',
+      updatedAt: map['updated_at']?.toString() ?? '',
+      pesanan: map['pesanan'] is List
+          ? List<Pesanan>.from(
+              (map['pesanan'] as List).map((x) => Pesanan.fromMap(x)))
+          : [],
     );
   }
 }
@@ -79,15 +83,18 @@ class Pesanan {
 
   factory Pesanan.fromMap(Map<String, dynamic> map) {
     return Pesanan(
-      id: map['id'] as int,
-      userId: map['user_id'] as int,
-      paketId: map['paket_id'] as int,
+      id: int.tryParse(map['id'].toString()) ?? 0,
+      userId: int.tryParse(map['user_id'].toString()) ?? 0,
+      paketId: int.tryParse(map['paket_id'].toString()) ?? 0,
       mobil: map['mobil']?.toString() ?? '',
       buktiPembayaran: map['bukti_pembayaran']?.toString() ?? '',
       status: map['status']?.toString() ?? '',
-      createdAt: map['created_at'] as String,
-      updatedAt: map['updated_at'] as String,
-      jadwal: List<Jadwal>.from(map['jadwal'].map((x) => Jadwal.fromMap(x))),
+      createdAt: map['created_at']?.toString() ?? '',
+      updatedAt: map['updated_at']?.toString() ?? '',
+      jadwal: map['jadwal'] is List
+          ? List<Jadwal>.from(
+              (map['jadwal'] as List).map((x) => Jadwal.fromMap(x)))
+          : [],
     );
   }
 }
@@ -117,10 +124,11 @@ class Jadwal {
 
   factory Jadwal.fromMap(Map<String, dynamic> map) {
     return Jadwal(
-      id: map['id'] as int,
-      pesananId: map['pesanan_id'] as int,
-      instrukturId:
-          map['instruktur_id'] != null ? map['instruktur_id'] as int : null,
+      id: int.tryParse(map['id'].toString()) ?? 0,
+      pesananId: int.tryParse(map['pesanan_id'].toString()) ?? 0,
+      instrukturId: map['instruktur_id'] != null
+          ? int.tryParse(map['instruktur_id'].toString())
+          : null,
       tanggal: map['tanggal'] as String,
       waktuMulai: map['waktu_mulai'] as String,
       waktuSelesai: map['waktu_selesai'] as String,

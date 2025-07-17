@@ -1,4 +1,3 @@
-
 class PemilikDataResponse {
   final bool success;
   final String message;
@@ -58,16 +57,16 @@ class Success {
   });
 
   factory Success.fromMap(Map<String, dynamic> json) => Success(
-        id: json["id"] ?? 0,
-        userId: json["user_id"] ?? 0,
-        paketId: json["paket_id"] ?? 0,
-        mobil: json["mobil"],
-        buktiPembayaran: json['bukti_pembayaran'] as String?,
-        status: json["status"] ?? '',
+        id: int.tryParse(json["id"].toString()) ?? 0,
+        userId: int.tryParse(json["user_id"].toString()) ?? 0,
+        paketId: int.tryParse(json["paket_id"].toString()) ?? 0,
+        mobil: json["mobil"]?.toString(),
+        buktiPembayaran: json["bukti_pembayaran"]?.toString(),
+        status: json["status"]?.toString() ?? '',
         createdAt:
-            DateTime.tryParse(json["created_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now(),
         updatedAt:
-            DateTime.tryParse(json["updated_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now(),
         user: User.fromMap(json["user"] ?? {}),
         paket: Paket.fromMap(json["paket"] ?? {}),
         jadwal: (json["jadwal"] as List<dynamic>? ?? [])
@@ -98,18 +97,18 @@ class User {
   });
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-        id: json["id"] ?? 0,
-        name: json["name"] ?? '',
-        username: json["username"] ?? '',
-        noHp: json["no_hp"] ?? '',
-        email: json["email"] ?? '',
+        id: int.tryParse(json["id"].toString()) ?? 0,
+        name: json["name"]?.toString() ?? '',
+        username: json["username"]?.toString() ?? '',
+        noHp: json["no_hp"]?.toString() ?? '',
+        email: json["email"]?.toString() ?? '',
         emailVerifiedAt: json["email_verified_at"] != null
-            ? DateTime.tryParse(json["email_verified_at"])
+            ? DateTime.tryParse(json["email_verified_at"].toString())
             : null,
         createdAt:
-            DateTime.tryParse(json["created_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now(),
         updatedAt:
-            DateTime.tryParse(json["updated_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now(),
       );
 }
 
@@ -135,16 +134,16 @@ class Paket {
   });
 
   factory Paket.fromMap(Map<String, dynamic> json) => Paket(
-        id: json["id"] ?? 0,
-        namaPaket: json["nama_paket"] ?? '',
-        jumlahJam: json["jumlah_jam"] ?? '',
-        noRekening: json["no_rekening"] ?? '',
-        deskripsi: json["deskripsi"] ?? '',
-        harga: json["harga"] ?? '',
+        id: int.tryParse(json["id"].toString()) ?? 0,
+        namaPaket: json["nama_paket"]?.toString() ?? '',
+        jumlahJam: json["jumlah_jam"]?.toString() ?? '',
+        noRekening: json["no_rekening"]?.toString() ?? '',
+        deskripsi: json["deskripsi"]?.toString() ?? '',
+        harga: json["harga"]?.toString() ?? '',
         createdAt:
-            DateTime.tryParse(json["created_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now(),
         updatedAt:
-            DateTime.tryParse(json["updated_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now(),
       );
 }
 
@@ -172,16 +171,17 @@ class Jadwal {
   });
 
   factory Jadwal.fromMap(Map<String, dynamic> json) => Jadwal(
-        id: json["id"] ?? 0,
-        pesananId: json["pesanan_id"] ?? 0,
-        instrukturId: json["instruktur_id"] ?? 0,
-        tanggal: DateTime.tryParse(json["tanggal"] ?? '') ?? DateTime.now(),
-        waktuMulai: json["waktu_mulai"] ?? '',
-        waktuSelesai: json["waktu_selesai"] ?? '',
-        status: json["status"] ?? '',
+        id: int.tryParse(json["id"].toString()) ?? 0,
+        pesananId: int.tryParse(json["pesanan_id"].toString()) ?? 0,
+        instrukturId: int.tryParse(json["instruktur_id"].toString()) ?? 0,
+        tanggal:
+            DateTime.tryParse(json["tanggal"].toString()) ?? DateTime.now(),
+        waktuMulai: json["waktu_mulai"]?.toString() ?? '',
+        waktuSelesai: json["waktu_selesai"]?.toString() ?? '',
+        status: json["status"]?.toString() ?? '',
         createdAt:
-            DateTime.tryParse(json["created_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now(),
         updatedAt:
-            DateTime.tryParse(json["updated_at"] ?? '') ?? DateTime.now(),
+            DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now(),
       );
 }
