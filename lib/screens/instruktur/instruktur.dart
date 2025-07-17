@@ -6,7 +6,7 @@ import 'package:kursus_mengemudi_nasional/logic/user_status/user_status_bloc.dar
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
 import 'package:kursus_mengemudi_nasional/models/request/instruktur/update_status_request.dart';
 import 'package:kursus_mengemudi_nasional/models/response/instruktur/user_status.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/auth/login_page.dart';
 
 class JadwalPage extends StatefulWidget {
   const JadwalPage({super.key});
@@ -16,40 +16,38 @@ class JadwalPage extends StatefulWidget {
 }
 
 class _JadwalPageState extends State<JadwalPage> {
-  // Modern Blue Color Scheme
-  static const Color primaryBlue = Color(0xFF2196F3);
-  static const Color lightBlue = Color(0xFF64B5F6);
-  static const Color darkBlue = Color(0xFF1976D2);
-  static const Color accentBlue = Color(0xFF03DAC6);
-  static const Color backgroundBlue = Color(0xFFF3F8FF);
+  // Simple Modern Color Scheme
+  static const Color primaryBlue = Color(0xFF3B82F6);
+  static const Color textGray = Color(0xFF64748B);
+  static const Color lightGray = Color(0xFFF8FAFC);
 
   Color _getStatusColor(String status) {
     switch (status) {
       case "pending":
-        return const Color(0xFFFF9800);
+        return const Color(0xFFF59E0B);
       case "ongoing":
         return primaryBlue;
       case "completed":
-        return const Color(0xFF4CAF50);
+        return const Color(0xFF10B981);
       case "cancelled":
-        return const Color(0xFFF44336);
+        return const Color(0xFFEF4444);
       default:
-        return Colors.grey;
+        return textGray;
     }
   }
 
   IconData _getStatusIcon(String status) {
     switch (status) {
       case "pending":
-        return Icons.schedule_rounded;
+        return Icons.schedule;
       case "ongoing":
-        return Icons.play_circle_filled_rounded;
+        return Icons.play_circle_filled;
       case "completed":
-        return Icons.check_circle_rounded;
+        return Icons.check_circle;
       case "cancelled":
-        return Icons.cancel_rounded;
+        return Icons.cancel;
       default:
-        return Icons.help_rounded;
+        return Icons.help;
     }
   }
 
@@ -69,18 +67,11 @@ class _JadwalPageState extends State<JadwalPage> {
           success: (res) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Row(
-                  children: [
-                    const Icon(Icons.check_circle_rounded, color: Colors.white),
-                    const SizedBox(width: 8),
-                    Text(res.message),
-                  ],
-                ),
-                backgroundColor: const Color(0xFF4CAF50),
+                content: Text(res.message),
+                backgroundColor: const Color(0xFF10B981),
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    borderRadius: BorderRadius.circular(8)),
               ),
             );
             context.read<UserStatusBloc>().add(UserStatusEvent.userStatus());
@@ -88,18 +79,11 @@ class _JadwalPageState extends State<JadwalPage> {
           error: (msg) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Row(
-                  children: [
-                    const Icon(Icons.error_rounded, color: Colors.white),
-                    const SizedBox(width: 8),
-                    Text(msg),
-                  ],
-                ),
-                backgroundColor: const Color(0xFFF44336),
+                content: Text(msg),
+                backgroundColor: const Color(0xFFEF4444),
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    borderRadius: BorderRadius.circular(8)),
               ),
             );
           },
@@ -107,8 +91,8 @@ class _JadwalPageState extends State<JadwalPage> {
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: backgroundBlue,
-          appBar: _buildModernAppBar(context),
+          backgroundColor: Colors.white,
+          appBar: _buildAppBar(context),
           body: BlocBuilder<UserStatusBloc, UserStatusState>(
             builder: (context, state) {
               return state.maybeWhen(
@@ -138,30 +122,18 @@ class _JadwalPageState extends State<JadwalPage> {
     );
   }
 
-  PreferredSizeWidget _buildModernAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: primaryBlue,
+      backgroundColor: const Color(0xFF3B82F6),
       foregroundColor: Colors.white,
-      title: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.calendar_today_rounded, size: 20),
-          ),
-          const SizedBox(width: 12),
-          const Text(
-            "Jadwal Kursus",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ],
+      title: const Text(
+        "Instruktur Page",
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 20,
+          color: Colors.white,
+        ),
       ),
       actions: [
         BlocConsumer<LogoutBloc, LogoutState>(
@@ -171,95 +143,54 @@ class _JadwalPageState extends State<JadwalPage> {
               error: (message) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Row(
-                      children: [
-                        const Icon(Icons.error_rounded, color: Colors.white),
-                        const SizedBox(width: 8),
-                        Text(message),
-                      ],
-                    ),
-                    backgroundColor: const Color(0xFFF44336),
+                    content: Text(message),
+                    backgroundColor: const Color(0xFFEF4444),
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                        borderRadius: BorderRadius.circular(8)),
                   ),
                 );
               },
               success: () {
                 AuthlocalDatasource().removeLoginData();
                 Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (route) => false);
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  (route) => false,
+                );
               },
             );
           },
           builder: (context, state) {
-            return Container(
-              margin: const EdgeInsets.only(right: 16),
-              child: IconButton(
-                onPressed: () {
-                  context.read<LogoutBloc>().add(const LogoutEvent.logout());
-                },
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.logout_rounded, size: 20),
+            return IconButton(
+              onPressed: () {
+                context.read<LogoutBloc>().add(const LogoutEvent.logout());
+              },
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEF4444),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.logout,
+                  size: 18,
+                  color: Colors.white,
                 ),
               ),
             );
           },
         ),
+        const SizedBox(width: 16),
       ],
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [primaryBlue, darkBlue],
-          ),
-        ),
-      ),
     );
   }
 
   Widget _buildLoadingState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: primaryBlue.withValues(alpha: 0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(primaryBlue),
-              strokeWidth: 3,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            'Memuat jadwal...',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+    return const Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(primaryBlue),
+        strokeWidth: 2,
       ),
     );
   }
@@ -269,56 +200,26 @@ class _JadwalPageState extends State<JadwalPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.all(32),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: primaryBlue.withValues(alpha: 0.1),
-                  blurRadius: 30,
-                  offset: const Offset(0, 15),
-                ),
-              ],
+          Icon(
+            Icons.event_busy,
+            size: 64,
+            color: textGray.withOpacity(0.5),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Tidak ada jadwal',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: textGray,
             ),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        lightBlue.withValues(alpha: 0.2),
-                        primaryBlue.withValues(alpha: 0.1)
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.event_busy_rounded,
-                    size: 64,
-                    color: primaryBlue,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Tidak ada jadwal',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Belum ada jadwal kursus yang tersedia',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Belum ada jadwal kursus yang tersedia',
+            style: TextStyle(
+              fontSize: 14,
+              color: textGray.withOpacity(0.7),
             ),
           ),
         ],
@@ -328,12 +229,12 @@ class _JadwalPageState extends State<JadwalPage> {
 
   Widget _buildScheduleList(List<Map<String, dynamic>> allData) {
     return ListView.builder(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       itemCount: allData.length,
       itemBuilder: (context, index) {
         final username = allData[index]['username'];
         final pesanan = allData[index]['pesanan'];
-        return ModernUserStatusCard(
+        return SimpleUserCard(
           name: username,
           status: pesanan.status,
           mobil: pesanan.mobil,
@@ -346,7 +247,7 @@ class _JadwalPageState extends State<JadwalPage> {
   }
 }
 
-class ModernUserStatusCard extends StatelessWidget {
+class SimpleUserCard extends StatelessWidget {
   final String status;
   final String mobil;
   final List<Jadwal> jadwal;
@@ -354,7 +255,7 @@ class ModernUserStatusCard extends StatelessWidget {
   final Color Function(String) getStatusColor;
   final IconData Function(String) getStatusIcon;
 
-  const ModernUserStatusCard({
+  const SimpleUserCard({
     super.key,
     required this.status,
     required this.mobil,
@@ -364,111 +265,71 @@ class ModernUserStatusCard extends StatelessWidget {
     required this.getStatusIcon,
   });
 
-  static const Color primaryBlue = Color(0xFF2196F3);
-  static const Color lightBlue = Color(0xFF64B5F6);
-  static const Color darkBlue = Color(0xFF1976D2);
+  static const Color primaryBlue = Color(0xFF3B82F6);
+  static const Color textGray = Color(0xFF64748B);
+  static const Color lightGray = Color(0xFFF8FAFC);
+  static const Color borderGray = Color(0xFFE2E8F0);
 
   @override
   Widget build(BuildContext context) {
-    final statusIcon = status == 'success'
-        ? const Icon(Icons.check_circle_rounded,
-            color: Color(0xFF4CAF50), size: 18)
-        : const Icon(Icons.error_rounded, color: Colors.red, size: 18);
-
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderGray),
         boxShadow: [
           BoxShadow(
-            color: primaryBlue.withValues(alpha: 0.08),
-            blurRadius: 25,
-            offset: const Offset(0, 12),
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header dengan gradient
+          // Header
           Container(
-            padding: const EdgeInsets.all(24),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [primaryBlue, darkBlue],
-              ),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: primaryBlue,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.person_rounded,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
                         name,
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                           color: Colors.white,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.directions_car_rounded,
-                      size: 18,
-                      color: Colors.white70,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      mobil,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      statusIcon,
-                      const SizedBox(width: 8),
+                      const SizedBox(height: 4),
                       Text(
-                        'Status: $status',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
+                        mobil,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -477,197 +338,147 @@ class ModernUserStatusCard extends StatelessWidget {
               ],
             ),
           ),
-          // Content
+          // Schedule List
           Padding(
-            padding: const EdgeInsets.all(24),
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                dividerColor: Colors.transparent,
-                expansionTileTheme: const ExpansionTileThemeData(
-                  tilePadding: EdgeInsets.zero,
-                  childrenPadding: EdgeInsets.zero,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Jadwal Kursus',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: textGray,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (jadwal.isNotEmpty)
+                  ...jadwal.map((j) => _buildScheduleItem(context, j)),
+                if (jadwal.isEmpty)
+                  Text(
+                    'Jadwal Belum di Tambahkan',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: textGray.withOpacity(0.7),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScheduleItem(BuildContext context, Jadwal j) {
+    final statusColor = getStatusColor(j.status);
+    final statusIcon = getStatusIcon(j.status);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: lightGray,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: borderGray.withOpacity(0.5)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: statusColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Icon(
+                  statusIcon,
+                  size: 16,
+                  color: statusColor,
                 ),
               ),
-              child: ExpansionTile(
-                initiallyExpanded: false,
-                title: Row(
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: primaryBlue.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(
-                        Icons.schedule_rounded,
-                        color: primaryBlue,
-                        size: 16,
+                    Text(
+                      _formatDate(DateTime.parse(j.tanggal)),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black87,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      "Jadwal Kursus",
+                    Text(
+                      "${j.waktuMulai.substring(0, 5)} - ${j.waktuSelesai.substring(0, 5)}",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: primaryBlue,
+                        fontSize: 12,
+                        color: textGray,
                       ),
                     ),
                   ],
                 ),
-                children: jadwal.map((j) {
-                  final statusColor = getStatusColor(j.status);
-                  final statusIcon = getStatusIcon(j.status);
-                  final isPast =
-                      DateTime.parse(j.tanggal).isBefore(DateTime.now());
-
-                  return Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          primaryBlue.withValues(alpha: 0.05),
-                          lightBlue.withValues(alpha: 0.02),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: primaryBlue.withValues(alpha: 0.1),
-                        width: 1,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: statusColor.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(statusIcon,
-                                  size: 16, color: statusColor),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _formatDate(DateTime.parse(j.tanggal)),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${j.waktuMulai.substring(0, 5)} - ${j.waktuSelesai.substring(0, 5)}",
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: statusColor,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                j.status,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Text(
-                              "ID: ${j.id}",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[500],
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [primaryBlue, darkBlue],
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: primaryBlue.withOpacity(0.3),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  final request = UpdateRequestStatus(
-                                    idJadwal: j.id,
-                                    status: 'ongoing',
-                                  );
-                                  debugPrint(request.status);
-                                  debugPrint(request.idJadwal.toString());
-
-                                  context
-                                      .read<UpdateStatusInstruktutBloc>()
-                                      .add(
-                                        UpdateStatusInstruktutEvent
-                                            .updateStatus(request),
-                                      );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                icon:
-                                    const Icon(Icons.update_rounded, size: 16),
-                                label: const Text(
-                                  "Update Status",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
               ),
-            ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: statusColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  j.status,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "ID: ${j.id}",
+                style: TextStyle(
+                  fontSize: 11,
+                  color: textGray.withOpacity(0.7),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final request = UpdateRequestStatus(
+                    idJadwal: j.id,
+                    status: 'ongoing',
+                  );
+                  context.read<UpdateStatusInstruktutBloc>().add(
+                        UpdateStatusInstruktutEvent.updateStatus(request),
+                      );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryBlue,
+                  foregroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  "Selesai",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

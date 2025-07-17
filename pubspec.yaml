@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
+  flutter_launcher_icons: ^0.14.3
   freezed_annotation: ^2.4.4
   http: ^1.4.0
   image_picker: ^1.1.2

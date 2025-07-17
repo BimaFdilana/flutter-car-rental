@@ -1,55 +1,49 @@
 import 'dart:convert';
 
 class AllPesananKasirResponse {
-  final bool? success;
-  final List<Datum>? data;
+    final bool success;
+    final List<Datum> data;
 
-  AllPesananKasirResponse({
-    this.success,
-    this.data,
-  });
+    AllPesananKasirResponse({
+        required this.success,
+        required this.data,
+    });
 
-  factory AllPesananKasirResponse.fromJson(String str) =>
-      AllPesananKasirResponse.fromMap(json.decode(str));
+    factory AllPesananKasirResponse.fromJson(String str) => AllPesananKasirResponse.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
+    String toJson() => json.encode(toMap());
 
-  factory AllPesananKasirResponse.fromMap(Map<String, dynamic> json) =>
-      AllPesananKasirResponse(
+    factory AllPesananKasirResponse.fromMap(Map<String, dynamic> json) => AllPesananKasirResponse(
         success: json["success"],
-        data: json["data"] != null
-            ? List<Datum>.from(json["data"].map((x) => Datum.fromMap(x)))
-            : null,
-      );
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
+    );
 
-  Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toMap() => {
         "success": success,
-        "data": data != null
-            ? List<dynamic>.from(data!.map((x) => x.toMap()))
-            : null,
-      };
+        "data": List<dynamic>.from(data.map((x) => x.toMap())),
+    };
 }
 
 class Datum {
-  final int? pesananId;
+  final int pesananId;
   final String? namaUser;
   final String? namaPaket;
   final String? status;
-  final int? jumlahJamPaket;
+  final int jumlahJamPaket;
   final String? mobil;
-  final int? jamTerpakai;
-  final int? jamSisa;
+  final int jamTerpakai;
+  final int jamSisa;
   final String? buktiPembayaran;
 
   Datum({
-    this.pesananId,
+    required this.pesananId,
     this.namaUser,
     this.namaPaket,
     this.status,
-    this.jumlahJamPaket,
+    required this.jumlahJamPaket,
     this.mobil,
-    this.jamTerpakai,
-    this.jamSisa,
+    required this.jamTerpakai,
+    required this.jamSisa,
     this.buktiPembayaran,
   });
 
@@ -58,23 +52,15 @@ class Datum {
   String toJson() => json.encode(toMap());
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-        pesananId:
-            json["pesanan_id"] != null ? json["pesanan_id"] as int : null,
-        namaUser:
-            json["nama_user"] != null ? json["nama_user"] as String : null,
-        namaPaket:
-            json["nama_paket"] != null ? json["nama_paket"] as String : null,
-        status: json["status"] != null ? json["status"] as String : null,
-        jumlahJamPaket: json["jumlah_jam_paket"] != null
-            ? json["jumlah_jam_paket"] as int
-            : null,
-        mobil: json["mobil"] != null ? json["mobil"] as String : null,
-        jamTerpakai:
-            json["jam_terpakai"] != null ? json["jam_terpakai"] as int : null,
-        jamSisa: json["jam_sisa"] != null ? json["jam_sisa"] as int : null,
-        buktiPembayaran: json["bukti_pembayaran"] != null
-            ? json["bukti_pembayaran"] as String
-            : null,
+        pesananId: json["pesanan_id"],
+        namaUser: json["nama_user"],
+        namaPaket: json["nama_paket"],
+        status: json["status"],
+        jumlahJamPaket: json["jumlah_jam_paket"] ?? 0,
+        mobil: json["mobil"],
+        jamTerpakai: json["jam_terpakai"] ?? 0,
+        jamSisa: json["jam_sisa"] ?? 0,
+        buktiPembayaran: json["bukti_pembayaran"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -89,3 +75,4 @@ class Datum {
         "bukti_pembayaran": buktiPembayaran,
       };
 }
+

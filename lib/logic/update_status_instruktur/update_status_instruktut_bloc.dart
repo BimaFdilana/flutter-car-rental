@@ -15,10 +15,7 @@ class UpdateStatusInstruktutBloc
       : super(const _Initial()) {
     on<_UpdateStatusInstruktur>((event, emit) async {
       emit(UpdateStatusInstruktutState.loading());
-
       try {
-
-
         final model = UpdateRequestStatus(
           idJadwal: event.request.idJadwal,
           status: event.request.status,

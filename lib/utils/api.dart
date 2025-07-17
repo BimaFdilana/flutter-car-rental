@@ -1,5 +1,9 @@
 class BaseUrl {
-  static const String baseUrl = 'http://192.168.1.39:8000';
+  // static const String baseUrl =
+  // 'https://1be-mobile.virtualtouralamayangpku.my.id';
+  static const String baseUrl =
+      'https://1be-mobile.virtualtouralamayangpku.my.id';
+
   static const String storage = '$baseUrl/storage/';
 }
 
@@ -31,5 +35,29 @@ class ApiEndpoint {
 
   // Kasir
   static const String allPesanan = '${BaseUrl.baseUrl}${Api.api}/pesanan';
-  static const String allJadwal = '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa';
+  static const String detailPesanan =
+      '${BaseUrl.baseUrl}${Api.api}/pesanan/{id}';
+  static const String updatePesanan =
+      '${BaseUrl.baseUrl}${Api.api}/pesanan/{id}';
+
+  // paket kasir
+  static const String allPaket = '${BaseUrl.baseUrl}${Api.api}/paket';
+  static const String detailPaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
+  static const String createPaket = '${BaseUrl.baseUrl}${Api.api}/paket';
+  static const String editPaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
+  static const String deletePaket = '${BaseUrl.baseUrl}${Api.api}/paket/{id}';
+
+  // user setting
+  static const String allUsers = '${BaseUrl.baseUrl}${Api.api}/users';
+  static const String addUser = '${BaseUrl.baseUrl}${Api.api}/users';
+  static const String deleteUser = '${BaseUrl.baseUrl}${Api.api}/users/{id}';
+
+  // kasir jadwal
+  static const String allJadwalKasir =
+      '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa';
+  static const String changeStatusJadwalKasir =
+      '${BaseUrl.baseUrl}${Api.api}/jadwal-siswa/{id}/status';
+
+  // owner
+  static const String dataOwner = '${BaseUrl.baseUrl}${Api.api}/owner/data';
 }

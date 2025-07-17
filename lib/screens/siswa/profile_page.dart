@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/local_user/local_user_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/auth/login_page.dart';
 import 'package:kursus_mengemudi_nasional/utils/theme.dart';
 
 class ProfilePage extends StatefulWidget {

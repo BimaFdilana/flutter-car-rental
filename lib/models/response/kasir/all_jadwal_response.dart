@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class AllJadwalKasirResponse {
   final bool success;
-  final List<Datum> data;
+  final List<JadwalKasirItem> data;
 
   AllJadwalKasirResponse({
     required this.success,
@@ -18,7 +18,8 @@ class AllJadwalKasirResponse {
       AllJadwalKasirResponse(
         success: json["success"] ?? false,
         data: json["data"] != null
-            ? List<Datum>.from(json["data"].map((x) => Datum.fromMap(x)))
+            ? List<JadwalKasirItem>.from(
+                json["data"].map((x) => JadwalKasirItem.fromMap(x)))
             : [],
       );
 
@@ -28,7 +29,7 @@ class AllJadwalKasirResponse {
       };
 }
 
-class Datum {
+class JadwalKasirItem {
   final int id;
   final int pesananId;
   final int? instrukturId;
@@ -41,7 +42,7 @@ class Datum {
   final Pesanan? pesanan;
   final Instruktur? instruktur;
 
-  Datum({
+  JadwalKasirItem({
     required this.id,
     required this.pesananId,
     required this.instrukturId,
@@ -55,17 +56,17 @@ class Datum {
     required this.instruktur,
   });
 
-  factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
+  factory JadwalKasirItem.fromJson(String str) =>
+      JadwalKasirItem.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+  factory JadwalKasirItem.fromMap(Map<String, dynamic> json) => JadwalKasirItem(
         id: json["id"] ?? 0,
         pesananId: json["pesanan_id"] ?? 0,
         instrukturId: json["instruktur_id"],
-        tanggal: json["tanggal"] != null
-            ? DateTime.tryParse(json["tanggal"])
-            : null,
+        tanggal:
+            json["tanggal"] != null ? DateTime.tryParse(json["tanggal"]) : null,
         waktuMulai: json["waktu_mulai"],
         waktuSelesai: json["waktu_selesai"],
         status: json["status"],
@@ -201,5 +202,86 @@ class Pesanan {
         "status": status,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class ChangeJadwalKasirResponse {
+  final bool success;
+  final ChangeJadwalKasirData data;
+
+  ChangeJadwalKasirResponse({
+    required this.success,
+    required this.data,
+  });
+
+  factory ChangeJadwalKasirResponse.fromJson(String str) =>
+      ChangeJadwalKasirResponse.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory ChangeJadwalKasirResponse.fromMap(Map<String, dynamic> json) =>
+      ChangeJadwalKasirResponse(
+        success: json["success"] ?? false,
+        data: ChangeJadwalKasirData.fromMap(json["data"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "success": success,
+        "data": data.toMap(),
+      };
+}
+
+class ChangeJadwalKasirData {
+  final int id;
+  final int pesananId;
+  final int instrukturId;
+  final DateTime tanggal;
+  final String? waktuMulai;
+  final String? waktuSelesai;
+  final String? status;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  ChangeJadwalKasirData({
+    required this.id,
+    required this.pesananId,
+    required this.instrukturId,
+    required this.tanggal,
+    required this.waktuMulai,
+    required this.waktuSelesai,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory ChangeJadwalKasirData.fromJson(String str) =>
+      ChangeJadwalKasirData.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory ChangeJadwalKasirData.fromMap(Map<String, dynamic> json) =>
+      ChangeJadwalKasirData(
+        id: json["id"] ?? 0,
+        pesananId: json["pesanan_id"] ?? 0,
+        instrukturId: json["instruktur_id"] ?? 0,
+        tanggal: DateTime.parse(json["tanggal"]),
+        waktuMulai: json["waktu_mulai"],
+        waktuSelesai: json["waktu_selesai"],
+        status: json["status"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "pesanan_id": pesananId,
+        "instruktur_id": instrukturId,
+        "tanggal":
+            "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
+        "waktu_mulai": waktuMulai,
+        "waktu_selesai": waktuSelesai,
+        "status": status,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
       };
 }

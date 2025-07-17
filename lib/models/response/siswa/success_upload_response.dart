@@ -55,10 +55,13 @@ class Pesanan {
 
   String toJson() => json.encode(toMap());
 
+  // ✅ DIUBAH DI SINI
   factory Pesanan.fromMap(Map<String, dynamic> json) => Pesanan(
-        id: json["id"],
-        userId: json["user_id"],
-        paketId: json["paket_id"],
+        // Menggunakan int.parse() untuk mencegah error tipe data
+        id: int.parse(json["id"].toString()),
+        userId: int.parse(json["user_id"].toString()),
+        paketId: int.parse(json["paket_id"].toString()),
+
         mobil: json["mobil"],
         buktiPembayaran: json["bukti_pembayaran"],
         status: json["status"],
@@ -73,7 +76,7 @@ class Pesanan {
         "mobil": mobil,
         "bukti_pembayaran": buktiPembayaran,
         "status": status,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
+        "created_at": createdAt.toIso8601String(), // Gunakan toIso8601String()
+        "updated_at": updatedAt.toIso8601String(), // Gunakan toIso8601String()
       };
 }

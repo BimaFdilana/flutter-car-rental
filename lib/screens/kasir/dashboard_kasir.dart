@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kursus_mengemudi_nasional/logic/logout/logout_bloc.dart';
 import 'package:kursus_mengemudi_nasional/models/local/login_local.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/all_pesanan.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/change_status_kursus.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/edit_status_pesanan.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/show_all_jadwal.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/show_all_user.dart';
-import 'package:kursus_mengemudi_nasional/screens/kasir/tambah_user.dart';
-import 'package:kursus_mengemudi_nasional/screens/siswa/login_page.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/jadwal/jadwal.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/paket/all_paket.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/pesanan/all_pesanan.dart';
+import 'package:kursus_mengemudi_nasional/screens/kasir/userAccount/show_all_user.dart';
+import 'package:kursus_mengemudi_nasional/screens/auth/login_page.dart';
 
 class DashboardKasir extends StatelessWidget {
   const DashboardKasir({super.key});
@@ -25,7 +23,7 @@ class DashboardKasir extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               Color(0xFF1976D2),
-              Color(0xFF42A5F5),
+              Colors.cyan,
               Color(0xFFF5F7FA),
             ],
             stops: [0.0, 0.3, 1.0],
@@ -93,7 +91,7 @@ class DashboardKasir extends StatelessWidget {
                             child: Container(
                               padding: EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.red[400],
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
@@ -131,7 +129,7 @@ class DashboardKasir extends StatelessWidget {
                         context,
                         'Data Pesanan',
                         Icons.shopping_cart_outlined,
-                        Color(0xFF2196F3),
+                        Colors.indigo,
                         () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -139,53 +137,33 @@ class DashboardKasir extends StatelessWidget {
                       ),
                       _buildMenuCard(
                         context,
-                        'Edit Status Pesanan',
-                        Icons.edit_outlined,
-                        Color(0xFF1976D2),
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditStatusPesanan())),
-                      ),
-                      _buildMenuCard(
-                        context,
                         'Jadwal Kursus',
                         Icons.schedule_outlined,
-                        Color(0xFF0D47A1),
+                        Colors.blueAccent,
                         () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ShowAllJadwal())),
+                                builder: (context) => JadwalListPage())),
                       ),
                       _buildMenuCard(
                         context,
-                        'Status Kursus',
-                        Icons.school_outlined,
-                        Color(0xFF1565C0),
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChangeStatusKursus())),
-                      ),
-                      _buildMenuCard(
-                        context,
-                        'Tambah User',
-                        Icons.person_add_outlined,
-                        Color(0xFF42A5F5),
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TambahUser())),
-                      ),
-                      _buildMenuCard(
-                        context,
-                        'Semua User',
-                        Icons.people_outlined,
-                        Color(0xFF64B5F6),
+                        'User Setting',
+                        Icons.person,
+                        Colors.lightBlue,
                         () => Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => UserListScreen())),
+                      ),
+                      _buildMenuCard(
+                        context,
+                        'Paket Kursus',
+                        Icons.card_giftcard_rounded,
+                        Colors.cyan,
+                        () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AllPaketScreen())),
                       ),
                     ],
                   ),
